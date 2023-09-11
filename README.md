@@ -7,6 +7,6 @@
 
 > npm install
 
-## Run Run the application
+## Run the application
 
 > npm run dev
