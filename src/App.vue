@@ -1,22 +1,23 @@
 <template>
-  <v-app color="primary">
-    <v-app-bar app
-               color="primary"
-               dark>
-      <OpenHeader/>
-    </v-app-bar>
+    <v-app color="primary">
+        <v-app-bar app
+                   color="primary"
+                   dark>
+            <Header/>
+        </v-app-bar>
 
-    <v-content>
-      <HelloWorld msg="test"></HelloWorld>
+        <v-main>
+            <v-container>
+                <HelloWorld/>
+            </v-container>
+        </v-main>
 
-    </v-content>
-
-    <OpenFooter />
-  </v-app>
+        <Footer/>
+    </v-app>
 </template>
 
 <script setup>
 import HelloWorld from "@/components/HelloWorld.vue";
-import OpenHeader from "@/components/OpenHeader.vue";
-import OpenFooter from "@/components/OpenFooter.vue";
+import Header from "@/components/Header.vue";
+import Footer from "@/components/Footer.vue";
 </script>
