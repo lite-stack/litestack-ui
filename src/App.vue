@@ -8,7 +8,7 @@
 
         <v-main>
             <v-container>
-                <HelloWorld/>
+                <router-view></router-view>
             </v-container>
         </v-main>
 
