@@ -4,7 +4,16 @@ import Servers from "@/views/Servers.vue";
 import Graphs from "@/views/Graphs.vue";
 import Databases from "@/views/Databases.vue";
 import Coding from "@/views/Coding.vue";
+
+import { useAuthStore } from '@/stores/auth.store.js';
+import LoginView from "@/views/LoginView.vue";
+
 const routes = [
+    {
+        path: '/login',
+        name: 'Login',
+        component: LoginView
+    },
     {
         path: '/',
         name: 'Home',
@@ -39,8 +48,22 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Instructions.vue')
     }
 ]
-const router = createRouter({
+export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes
 })
+
+// router.beforeEach(async (to) => {
+//     // redirect to login page if not logged in and trying to access a restricted page
+//     const publicPages = ['/login'];
+//     const authRequired = !publicPages.includes(to.path);
+//     const auth = useAuthStore();
+//
+//     if (authRequired && !auth.user) {
+//         auth.returnUrl = to.fullPath;
+//         return '/login';
+//     }
+// });
+
+
 export default router

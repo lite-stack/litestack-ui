@@ -24,11 +24,13 @@
         <v-spacer></v-spacer>
 
         <div class="d-flex justify-space-around" style="width:250px; max-width:350px">
+          <router-link to="/login">
             <v-btn
                 class="mx-4"
                 icon="mdi-login"
                 variant="plain"
             ></v-btn>
+          </router-link>
         </div>
 
     </v-toolbar>
