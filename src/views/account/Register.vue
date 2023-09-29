@@ -8,14 +8,14 @@ import { router } from '@/router';
 
 const schema = Yup.object().shape({
   firstName: Yup.string()
-      .required('First Name is required'),
+      .required("Введіть ім'я"),
   lastName: Yup.string()
-      .required('Last Name is required'),
+      .required('Введіть прізвище'),
   username: Yup.string()
-      .required('Username is required'),
+      .required("Введіть ім'я користувача"),
   password: Yup.string()
-      .required('Password is required')
-      .min(6, 'Password must be at least 6 characters')
+      .required('Введіть пароль')
+      .min(6, 'Пароль повинен містити щонайменше 6 символів')
 });
 
 async function onSubmit(values) {
@@ -32,38 +32,43 @@ async function onSubmit(values) {
 </script>
 
 <template>
-  <div class="card m-3">
-    <h4 class="card-header">Register</h4>
-    <div class="card-body">
-      <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+  <div class="auth-box">
+    <div class="auth-container">
+      <div class="auth-title">
+        <img class="auth-logo" src="../../assets/logo-full-white.svg" alt="">
+
+        <p>Реєстрація облікового запису</p>
+      </div>
+      <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }" class="auth-form">
         <div class="form-group">
-          <label>First Name</label>
+          <label>Ім'я</label>
           <Field name="firstName" type="text" class="form-control" :class="{ 'is-invalid': errors.firstName }" />
           <div class="invalid-feedback">{{ errors.firstName }}</div>
         </div>
         <div class="form-group">
-          <label>Last Name</label>
+          <label>Прізвище</label>
           <Field name="lastName" type="text" class="form-control" :class="{ 'is-invalid': errors.lastName }" />
           <div class="invalid-feedback">{{ errors.lastName }}</div>
         </div>
         <div class="form-group">
-          <label>Username</label>
+          <label>Ім'я користувача</label>
           <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }" />
           <div class="invalid-feedback">{{ errors.username }}</div>
         </div>
         <div class="form-group">
-          <label>Password</label>
+          <label>Пароль</label>
           <Field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" />
           <div class="invalid-feedback">{{ errors.password }}</div>
         </div>
-        <div class="form-group">
-          <button class="btn btn-primary" :disabled="isSubmitting">
-            <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
-            Register
-          </button>
-          <router-link to="login" class="btn btn-link">Cancel</router-link>
-        </div>
+        <span>Вже маєте обліковий запис? <router-link to="login" class="btn auth-link">Авторизуватися</router-link>.</span>
+        <button class="auth-btn" :disabled="isSubmitting">
+          <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+          Зареєструватися
+        </button>
+
+
       </Form>
     </div>
   </div>
 </template>
+

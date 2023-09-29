@@ -1,19 +1,14 @@
 <template>
-    <v-app color="primary">
-        <v-app-bar app
-                   color="primary"
-                   dark>
-            <Header/>
-        </v-app-bar>
+    <v-app>
 
-        <v-main>
-            <v-container>
-              <Alert/>
-                <router-view></router-view>
-            </v-container>
-        </v-main>
+      <Header v-if="authStore.user"/>
 
-        <Footer/>
+
+      <Alert/>
+      <router-view></router-view>
+
+
+      <Footer v-if="authStore.user"/>
     </v-app>
 </template>
 
@@ -27,3 +22,5 @@ import Alert from "@/components/Alert.vue";
 
 const authStore = useAuthStore();
 </script>
+
+
