@@ -24,17 +24,25 @@
         <v-spacer></v-spacer>
 
         <div class="d-flex justify-space-around" style="width:250px; max-width:350px">
-          <router-link to="/login">
+          <router-link v-if="!authStore.user" to="/login">
             <v-btn
                 class="mx-4"
                 icon="mdi-login"
                 variant="plain"
             ></v-btn>
           </router-link>
+          <router-link v-if="authStore.user" to="/users" class="nav-item nav-link">Users</router-link>
+          <button v-if="authStore.user" @click="authStore.logout()" class="btn btn-link nav-item nav-link">Logout</button>
         </div>
 
     </v-toolbar>
 </template>
+
+<script setup>
+import { useAuthStore } from '@/stores/auth.store.js';
+
+const authStore = useAuthStore();
+</script>
 
 <script>
 export default {

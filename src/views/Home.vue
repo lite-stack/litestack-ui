@@ -8,6 +8,7 @@
 
     <v-main>
       <v-container>
+        <Alert/>
         Hi {{authUser?.firstName || "unknown user"}}!
         <ul v-if="users.length">
           <li v-for="user in users" :key="user.id">{{user.firstName}} {{user.lastName}}</li>
@@ -28,6 +29,7 @@ import { storeToRefs } from 'pinia';
 
 import { useUsersStore } from '@/stores/users.store.js';
 import { useAuthStore } from '@/stores/auth.store.js';
+import Alert from "@/components/Alert.vue";
 
 const authStore = useAuthStore();
 const { user: authUser } = storeToRefs(authStore);
