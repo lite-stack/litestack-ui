@@ -6,13 +6,17 @@ import Databases from "@/views/Databases.vue";
 import Coding from "@/views/Coding.vue";
 
 import { useAuthStore } from '@/stores/auth.store.js';
-import LoginView from "@/views/LoginView.vue";
+import {useAlertStore} from "@/stores/alert.store.js";
+
+import Login from "@/views/account/Login.vue";
+import accountRoutes from "@/router/account.routes.js";
+import usersRoutes from "@/router/users.routes.js";
 
 const routes = [
     {
         path: '/login',
         name: 'Login',
-        component: LoginView
+        component: Login
     },
     {
         path: '/',
@@ -46,24 +50,32 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/Instructions.vue')
-    }
+    },
+    { ...accountRoutes },
+    { ...usersRoutes },
+    { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
+    linkActiveClass: 'active',
     routes
 })
 
-// router.beforeEach(async (to) => {
-//     // redirect to login page if not logged in and trying to access a restricted page
-//     const publicPages = ['/login'];
-//     const authRequired = !publicPages.includes(to.path);
-//     const auth = useAuthStore();
-//
-//     if (authRequired && !auth.user) {
-//         auth.returnUrl = to.fullPath;
-//         return '/login';
-//     }
-// });
+router.beforeEach(async (to) => {
+    // clear alert on route change
+    const alertStore = useAlertStore();
+    alertStore.clear();
+
+    // redirect to login page if not logged in and trying to access a restricted page
+    const publicPages = ['/account/login', '/account/register'];
+    const authRequired = !publicPages.includes(to.path);
+    const authStore = useAuthStore();
+
+    if (authRequired && !authStore.user) {
+        authStore.returnUrl = to.fullPath;
+        return '/account/login';
+    }
+});
 
 
 export default router
