@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
-import Servers from "@/views/Servers.vue";
 import Graphs from "@/views/Graphs.vue";
 import Databases from "@/views/Databases.vue";
 import Coding from "@/views/Coding.vue";
@@ -11,6 +10,7 @@ import {useAlertStore} from "@/stores/alert.store.js";
 import Login from "@/views/account/Login.vue";
 import accountRoutes from "@/router/account.routes.js";
 import usersRoutes from "@/router/users.routes.js";
+import serverRoutes from "@/router/server.routes.js";
 
 const routes = [
     {
@@ -22,11 +22,6 @@ const routes = [
         path: '/',
         name: 'Home',
         component: Home
-    },
-    {
-        path: '/servs',
-        name: 'Servers',
-        component: Servers
     },
     {
         path: '/graphs',
@@ -53,6 +48,7 @@ const routes = [
     },
     { ...accountRoutes },
     { ...usersRoutes },
+    {...serverRoutes },
     { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 export const router = createRouter({

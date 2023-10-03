@@ -38,6 +38,7 @@ function fakeBackend() {
             function authenticate() {
                 const { username, password } = body();
                 const user = users.find(x => x.username === username && x.password === password);
+                console.log(users)
 
                 if (!user) return error("Ім'я користувача або пароль невірні");
 

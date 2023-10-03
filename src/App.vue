@@ -17,7 +17,6 @@ import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 
 import { useAuthStore } from '@/stores/auth.store.js';
-import Nav from "@/components/Nav.vue";
 import Alert from "@/components/Alert.vue";
 
 const authStore = useAuthStore();

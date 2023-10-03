@@ -12,6 +12,13 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import * as styles from 'vuetify/styles'
+import colors from 'vuetify/lib/util/colors'
+import {
+    VDataTable,
+    VDataTableVirtual,
+} from "vuetify/labs/VDataTable";
+import 'vue-json-pretty/lib/styles.css';
+
 
 const customDarkTheme = {
     dark: true,
@@ -28,7 +35,11 @@ const customDarkTheme = {
 };
 
 const vuetify = createVuetify({
-    components,
+    components: {
+        ...components,
+        VDataTable,
+        VDataTableVirtual,
+    },
     directives,
     styles,
     theme: {
@@ -42,6 +53,18 @@ const vuetify = createVuetify({
         aliases,
         sets: {
             mdi,
+        },
+    },
+    theme: {
+        themes: {
+            light: {
+                dark: false,
+                colors: {
+                    primary: colors.teal.lighten1,
+                    secondary: colors.blueGrey.lighten2,
+                    red: colors.red.lighten1,
+                }
+            },
         },
     },
 })

@@ -12,16 +12,26 @@
         ></v-img>
       </router-link>
 
+    <v-toolbar dense>
         <v-spacer></v-spacer>
-          <v-btn
-              v-for="link in links"
-              :key="link"
-              variant="text"
-          >
-            <router-link :to="{ path: link[1]}">
+        <router-link to="/">
+            <v-img
+                src="src/assets/logo.full.svg"
+                width="150"
+                max-width="150"
+            ></v-img>
+        </router-link>
+
+        <v-spacer></v-spacer>
+        <v-btn
+            v-for="link in links"
+            :key="link"
+            variant="text"
+            :to="{ path: link[1]}"
+            class="mx-2"
+        >
             {{ link[0] }}
-            </router-link>
-          </v-btn>
+        </v-btn>
 
 
 
@@ -35,9 +45,10 @@
                 variant="plain"
             ></v-btn>
           </router-link>
-          <router-link v-if="authStore.user" to="/users" class="nav-item nav-link">Users</router-link>
-          <button v-if="authStore.user" @click="authStore.logout()" class="btn btn-link nav-item nav-link">Logout</button>
+          <v-btn v-if="authStore.user" to="/users" class="nav-item nav-link">Корстувачі</v-btn>
+          <v-btn v-if="authStore.user" @click="authStore.logout()" class="btn btn-link nav-item nav-link">Вихід</v-btn>
         </div>
+        <v-spacer></v-spacer>
 
     </v-toolbar>
 </template>
