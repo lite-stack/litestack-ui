@@ -1,10 +1,14 @@
 <template>
-    <v-toolbar dense>
+    <v-toolbar
+        color="#222222"
+        dark
+    >
       <router-link to="/">
         <v-img
-            src="src/assets/logo.full.svg"
+            src="../src/assets/logo-full-white.svg"
             width="150"
             max-width="150"
+            class="mx-8"
         ></v-img>
       </router-link>
 
