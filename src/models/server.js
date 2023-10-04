@@ -1,5 +1,6 @@
 export default class ServerBase {
-    constructor(name, status, public_ip, private_ip, launched_at, terminated_at) {
+    constructor(id, name, status, public_ip, private_ip, launched_at, terminated_at) {
+        this.id = id;
         this.name = name;
         this.status = status;
         this.public_ip = public_ip;
@@ -10,10 +11,18 @@ export default class ServerBase {
 
     getStatus() {
         switch (this.status) {
-            case 'active':
+            case 'ACTIVE':
                 return 'Активний'
-            case 'inactive':
-                return 'Неактивний'
+            case 'PAUSED':
+                return 'На паузі'
+            case 'BUILD':
+                return 'Створення'
+            case 'REBOOT':
+                return 'Перезавантаження'
+            case 'ERROR':
+                return 'Помилка'
+            case 'DELETED':
+                return 'Видалений'
             default:
                 return this.status
         }
@@ -21,12 +30,13 @@ export default class ServerBase {
 
     getStatusColor() {
         switch (this.status) {
-            case 'active':
+            case 'ACTIVE':
                 return 'green'
-            case 'inactive':
-                return 'red'
+            case 'DELETED':
+            case 'ERROR':
+                    return 'red'
             default:
-                return this.status
+                return 'blue'
         }
     }
 }

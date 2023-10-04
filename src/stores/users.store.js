@@ -12,9 +12,6 @@ export const useUsersStore = defineStore({
         user: {}
     }),
     actions: {
-        async register(user) {
-            await fetchWrapper.post(`${baseUrl}/register`, user);
-        },
         async getAll() {
             this.users = { loading: true };
             try {
@@ -32,7 +29,7 @@ export const useUsersStore = defineStore({
             }
         },
         async update(id, params) {
-            await fetchWrapper.put(`${baseUrl}/${id}`, params);
+            await fetchWrapper.patch(`${baseUrl}/${id}`, params);
 
             // update stored user if the logged in user updated their own record
             const authStore = useAuthStore();

@@ -16,7 +16,7 @@
         <v-spacer></v-spacer>
         <router-link to="/">
             <v-img
-                src="src/assets/logo.full.svg"
+                src="/src/assets/logo.full.svg"
                 width="150"
                 max-width="150"
             ></v-img>
@@ -37,16 +37,15 @@
 
         <v-spacer></v-spacer>
 
-        <div class="d-flex justify-space-around" style="width:250px; max-width:350px">
-          <router-link v-if="!authStore.user" to="/login">
+        <div class="d-flex justify-space-around align-center" style="width:250px; max-width:350px">
             <v-btn
+                v-if="!authStore.user" to="/login"
                 class="mx-4"
                 icon="mdi-login"
                 variant="plain"
             ></v-btn>
-          </router-link>
-          <v-btn v-if="authStore.user" to="/users" class="nav-item nav-link">Корстувачі</v-btn>
-          <v-btn v-if="authStore.user" @click="authStore.logout()" class="btn btn-link nav-item nav-link">Вихід</v-btn>
+            <v-btn v-if="authStore.user" to="/users" class="nav-item nav-link">Корстувачі</v-btn>
+            <v-btn v-if="authStore.user" @click="authStore.logout()" class="btn btn-link nav-item nav-link"  icon="mdi-logout"></v-btn>
         </div>
         <v-spacer></v-spacer>
 
@@ -54,7 +53,7 @@
 </template>
 
 <script setup>
-import { useAuthStore } from '@/stores/auth.store.js';
+import {useAuthStore} from '@/stores/auth.store.js';
 
 const authStore = useAuthStore();
 </script>

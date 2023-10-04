@@ -2,6 +2,7 @@ import ServerBase from "@/models/server.js"
 
 export default class ServerDetailed extends ServerBase {
     constructor(
+        id,
         name,
         status,
         public_ip,
@@ -17,13 +18,7 @@ export default class ServerDetailed extends ServerBase {
         metadata,
         full_info,
         ) {
-        super(name, status, public_ip, private_ip, launched_at, terminated_at);
-        this.name = name;
-        this.status = status;
-        this.public_ip = public_ip;
-        this.private_ip = private_ip;
-        this.launched_at = launched_at;
-        this.terminated_at = terminated_at;
+        super(id, name, status, public_ip, private_ip, launched_at, terminated_at);
         this.description=description;
         this.flavor=flavor;
         this.image=image;

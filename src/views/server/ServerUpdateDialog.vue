@@ -17,16 +17,18 @@
             <v-card-title>
                 <span class="text-h5 text-primary">Зміна серверу</span>
             </v-card-title>
-            
+
             <v-card-text>
                 <v-container>
 
                     <v-text-field
                         label="Назва"
+                        v-model="server.name"
                     ></v-text-field>
 
                     <v-textarea
                         label="Опис"
+                        v-model="server.description"
                     ></v-textarea>
 
                 </v-container>
@@ -39,6 +41,7 @@
                     color="primary"
                     variant="text"
                     @click="update"
+                    :loading="loading"
                 >
                     Змінити
                 </v-btn>
@@ -57,23 +60,34 @@
 
 <script>
 import ServerService from "@/services/server"
+import ServerUpdate from "@/models/server_update.js"
+import {useAlertStore} from '@/stores/alert.store.js';
 
 export default {
     name: 'ServerUpdateDialog',
-    props: ['name'],
+    props: ['server'],
     data() {
         return {
             dialog: false,
+            server: new ServerUpdate(this.$props.server.id, this.$props.server.name, this.$props.server.description),
+            loading: false,
         }
     },
     methods: {
         close() {
             this.dialog = false
         },
-        update() {
-            ServerService.updateServer(this.$props.name);
-            this.close();
-            this.$emit('updated', this.$props.name);
+        async update() {
+            this.loading = true
+            try {
+                await ServerService.updateServer(this.server);
+                this.$emit('updated', this.$props.server.id);
+            } catch (error) {
+                useAlertStore().error(error);
+            } finally {
+                this.close();
+                this.loading = false
+            }
         }
     }
 }

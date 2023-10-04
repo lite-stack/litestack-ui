@@ -18,7 +18,7 @@
             <v-card-title class="text">Ви впевненні, що хочете видалити сервер?</v-card-title>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red" variant="tonal" @click="deleteServer">Так</v-btn>
+                <v-btn color="red" variant="tonal" @click="deleteServer" :loading="loading">Так</v-btn>
                 <v-btn color="primary" variant="tonal" @click="close">Ні</v-btn>
                 <v-spacer></v-spacer>
             </v-card-actions>
@@ -28,23 +28,32 @@
 
 <script>
 import ServerService from "@/services/server"
+import {useAlertStore} from '@/stores/alert.store.js';
 
 export default {
     name: 'ServerDeleteDialog',
-    props: ['name'],
+    props: ['id'],
     data() {
         return {
             dialog: false,
+            loading: false,
         }
     },
     methods: {
         close() {
             this.dialog = false
         },
-        deleteServer() {
-            ServerService.deleteServer(this.$props.name);
-            this.close();
-            this.$emit('deleted', this.$props.name);
+        async deleteServer() {
+            this.loading = true
+            try {
+                await ServerService.deleteServer(this.$props.id);
+                this.$emit('deleted', this.$props.id);
+            } catch (error) {
+                useAlertStore().error(error);
+            } finally {
+                this.close();
+                this.loading = false
+            }
         }
     }
 }

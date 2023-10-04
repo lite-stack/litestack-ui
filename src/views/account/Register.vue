@@ -1,10 +1,6 @@
 <script setup>
-import { Form, Field } from 'vee-validate';
+import {Form, Field} from 'vee-validate';
 import * as Yup from 'yup';
-
-import { useUsersStore } from '@/stores/users.store.js';
-import { useAlertStore } from '@/stores/alert.store.js';
-import { router } from '@/router';
 
 const schema = Yup.object().shape({
   firstName: Yup.string()
@@ -17,17 +13,33 @@ const schema = Yup.object().shape({
       .required('Введіть пароль')
       .min(6, 'Пароль повинен містити щонайменше 6 символів')
 });
+</script>
 
-async function onSubmit(values) {
-  const usersStore = useUsersStore();
-  const alertStore = useAlertStore();
-  try {
-    await usersStore.register(values);
-    await router.push('/account/login');
-    alertStore.success('Registration successful');
-  } catch (error) {
-    alertStore.error(error);
-  }
+<script>
+import User from '@/models/user.js'
+
+import {useAuthStore} from '@/stores/auth.store.js';
+import {useAlertStore} from '@/stores/alert.store.js';
+
+export default {
+    name: 'Register',
+    components: {},
+    data() {
+        return {
+            user: new User(),
+        }
+    },
+    methods: {
+        async register() {
+            try {
+                await useAuthStore().register(this.user);
+                await this.$router.push('/account/login');
+                useAlertStore().success('Registration successful');
+            } catch (error) {
+                useAlertStore().error(error);
+            }
+        },
+    }
 }
 </script>
 
@@ -70,5 +82,40 @@ async function onSubmit(values) {
       </Form>
     </div>
   </div>
+</template>
+<template>
+
+    <div class="card m-3">
+        <h4 class="card-header">Register</h4>
+        <div class="card-body">
+            <Form @submit="register" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+                <div class="form-group">
+                    <label>Email</label>
+                    <Field name="email" type="text" class="form-control" :class="{ 'is-invalid': errors.email }"
+                           v-model="user.email"/>
+                    <div class="invalid-feedback">{{ errors.email }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }"
+                           v-model="user.username"/>
+                    <div class="invalid-feedback">{{ errors.username }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <Field name="password" type="password" class="form-control"
+                           :class="{ 'is-invalid': errors.password }" v-model="user.password"/>
+                    <div class="invalid-feedback">{{ errors.password }}</div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" :disabled="isSubmitting">
+                        <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+                        Register
+                    </button>
+                    <router-link to="login" class="btn btn-link">Cancel</router-link>
+                </div>
+            </Form>
+        </div>
+    </div>
 </template>
 

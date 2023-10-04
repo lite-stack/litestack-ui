@@ -1,18 +1,36 @@
 <script setup>
-import { Form, Field } from 'vee-validate';
+import {Form, Field} from 'vee-validate';
 import * as Yup from 'yup';
-
-import { useAuthStore } from '@/stores/auth.store.js';
 
 const schema = Yup.object().shape({
   username: Yup.string().required("Введіть ім'я користувача"),
   password: Yup.string().required('Введіть пароль')
 });
+</script>
 
-async function onSubmit(values) {
-  const authStore = useAuthStore();
-  const { username, password } = values;
-  await authStore.login(username, password);
+<script>
+import User from '@/models/user.js'
+
+import {useAuthStore} from '@/stores/auth.store.js';
+import {useAlertStore} from '@/stores/alert.store.js';
+
+export default {
+    name: 'Login',
+    components: {},
+    data() {
+        return {
+            user: new User(),
+        }
+    },
+    methods: {
+        async login() {
+            try {
+                await useAuthStore().login(this.user);
+            } catch (error) {
+                useAlertStore().error(error);
+            }
+        },
+    }
 }
 </script>
 
@@ -116,3 +134,30 @@ async function onSubmit(values) {
     color: rgba(89, 164, 124, 0.8);
   }
 </style>
+    <div class="card m-3">
+        <h4 class="card-header">Login</h4>
+        <div class="card-body">
+            <Form @submit="login" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+                <div class="form-group">
+                    <label>Username</label>
+                    <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }"
+                           v-model="user.username"/>
+                    <div class="invalid-feedback">{{ errors.username }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <Field name="password" type="password" class="form-control"
+                           :class="{ 'is-invalid': errors.password }" v-model="user.password"/>
+                    <div class="invalid-feedback">{{ errors.password }}</div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" :disabled="isSubmitting">
+                        <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+                        Login
+                    </button>
+                    <router-link to="register" class="btn btn-link">Register</router-link>
+                </div>
+            </Form>
+        </div>
+    </div>
+</template>

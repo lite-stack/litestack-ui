@@ -1,11 +1,11 @@
-export { fakeBackend };
+export { backendWrapper };
 
 // array in local storage for registered users
 const usersKey = 'vue-3-pinia-registration-login-example-users';
-let users = JSON.parse(localStorage.getItem(usersKey)) || [];
 
-function fakeBackend() {
+function backendWrapper() {
     let realFetch = window.fetch;
+    let users = []
     window.fetch = function (url, opts) {
         return new Promise((resolve, reject) => {
             // wrap in timeout to simulate server api call
@@ -13,11 +13,7 @@ function fakeBackend() {
 
             function handleRoute() {
                 switch (true) {
-                    case url.endsWith('/users/authenticate') && opts.method === 'POST':
-                        return authenticate();
-                    case url.endsWith('/users/register') && opts.method === 'POST':
-                        return register();
-                    case url.endsWith('/users') && opts.method === 'GET':
+                   case url.endsWith('/users') && opts.method === 'GET':
                         return getUsers();
                     case url.match(/\/users\/\d+$/) && opts.method === 'GET':
                         return getUserById();
@@ -32,35 +28,6 @@ function fakeBackend() {
                             .catch(error => reject(error));
                 }
             }
-
-            // route functions
-
-            function authenticate() {
-                const { username, password } = body();
-                const user = users.find(x => x.username === username && x.password === password);
-                console.log(users)
-
-                if (!user) return error("Ім'я користувача або пароль невірні");
-
-                return ok({
-                    ...basicDetails(user),
-                    token: 'fake-jwt-token'
-                });
-            }
-
-            function register() {
-                const user = body();
-
-                if (users.find(x => x.username === user.username)) {
-                    return error('Username "' + user.username + '" is already taken')
-                }
-
-                user.id = users.length ? Math.max(...users.map(x => x.id)) + 1 : 1;
-                users.push(user);
-                localStorage.setItem(usersKey, JSON.stringify(users));
-                return ok();
-            }
-
             function getUsers() {
                 if (!isAuthenticated()) return unauthorized();
                 return ok(users.map(x => basicDetails(x)));

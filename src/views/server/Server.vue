@@ -27,8 +27,27 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <ServerUpdateDialog v-bind:name=server.name @updated="fetchServer"/>
-                    <ServerDeleteDialog v-bind:name=server.name @deleted="goToServers"/>
+                    <ServerUpdateDialog v-bind:server=server @updated="fetchServer"/>
+                    <ServerDeleteDialog v-bind:id=server.id @deleted="goToServers"/>
+                    <v-btn
+                        class="mb-2"
+                        variant="tonal"
+                        color="primary"
+                        append-icon="mdi-menu-down"
+                    >
+                        Дії
+                        <v-menu activator="parent">
+                            <v-list>
+                                <v-list-item
+                                    v-for="(item, index) in actions"
+                                    :key="index"
+                                    :value="index"
+                                >
+                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -123,19 +142,28 @@ import ServerUpdateDialog from "@/views/server/ServerUpdateDialog.vue"
 export default {
     name: 'Server',
     components: {ServerDeleteDialog, ServerCreateDialog, ServerUpdateDialog, VueJsonPretty},
-    created() {
-        this.fetchServer(this.$route.params.name)
+    async created() {
+        await this.fetchServer(this.$route.params.id)
+        this.getServerActions()
     },
     data() {
         return {
-            server: {},
+            server: {
+                id: this.$route.params.id,
+            },
+            actions: [],
         }
     },
     methods: {
-        fetchServer(name) {
-            this.server = ServerService.getServer(name)
+        async fetchServer(id) {
+            this.server = await ServerService.getServer(id)
+        },
+        getServerActions() {
+            this.actions = ServerService.getServerActions()
+            console.log(this.actions)
         },
         goToServers() {
+            console.log('lol')
             this.$router.push('/servs')
         },
         toTitle(str) {

@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia';
 
-import { fetchWrapper } from '@/helpers/fetch-wrapper.js';
 import { router } from '@/router';
 import { useAlertStore } from '@/stores/alert.store.js';
-
-const baseUrl = `${import.meta.env.VITE_API_URL}/users`;
+import AuthAPI from '@/api/auth.js'
 
 export const useAuthStore = defineStore({
     id: 'auth',
@@ -14,9 +12,14 @@ export const useAuthStore = defineStore({
         returnUrl: null
     }),
     actions: {
-        async login(username, password) {
+        async register(user) {
+            await AuthAPI.register(user)
+        },
+        async login(user) {
             try {
-                const user = await fetchWrapper.post(`${baseUrl}/authenticate`, { username, password });
+                const tokens = await AuthAPI.login(user)
+                user.token = tokens["access_token"]
+                user.password = ''
 
                 // update pinia state
                 this.user = user;
@@ -25,16 +28,21 @@ export const useAuthStore = defineStore({
                 localStorage.setItem('user', JSON.stringify(user));
 
                 // redirect to previous url or default to home page
-                router.push(this.returnUrl || '/');
+                await router.push(this.returnUrl || '/servs');
             } catch (error) {
                 const alertStore = useAlertStore();
                 alertStore.error(error);
             }
         },
-        logout() {
+        async logout() {
+            try {
+                await AuthAPI.logout()
+            } catch (error) {
+                console.log(error);
+            }
             this.user = null;
             localStorage.removeItem('user');
-            router.push('/account/login');
+            await router.push('/account/login');
         }
     }
 });

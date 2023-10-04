@@ -7,6 +7,6 @@ export default {
     component: Layout,
     children: [
            {path: '', name: 'Servers', component: Servers},
-           {path: '/:name', name: 'Server instanse', component: Server},
+           {path: '/:id', name: 'Server instanse', component: Server},
         ]
     };

@@ -26,7 +26,8 @@
                     </v-card-text>
                     <v-spacer></v-spacer>
                     <v-card-actions>
-                        <ServerCreateDialog @created="createdServer"/>
+                        <ServerCreateDialog @created="createdServer" v-bind:configs=get_config_name()
+                                            v-bind:selected_config="config.name"/>
                     </v-card-actions>
                 </v-card>
             </v-slide-group-item>
@@ -52,7 +53,7 @@
                     <v-spacer></v-spacer>
                     <v-spacer></v-spacer>
                     <v-spacer></v-spacer>
-                    <ServerCreateDialog @created="createdServer"/>
+                    <ServerCreateDialog @created="createdServer" v-bind:configs="get_config_name()"/>
                 </v-toolbar>
             </template>
             <thead>
@@ -83,7 +84,7 @@
                 :key="server.name"
             >
                 <td>
-                    <router-link :to="{ name: 'Server instanse', params: {name: server.name} }"
+                    <router-link :to="{ name: 'Server instanse', params: {id: server.id} }"
                                  class="text-decoration-none">
                         {{ server.name }}
                     </router-link>
@@ -94,17 +95,17 @@
                     </v-chip>
                 </td>
                 <td><a :href='"http://" + server.public_ip' class="text-decoration-none"
-                       target="_blank">{{ server.public_ip }}</a></td>
+                       target="_blank">{{ server.public_ip || '-' }}</a></td>
                 <td><a :href='"http://" + server.private_ip' class="text-decoration-none"
-                       target="_blank">{{ server.private_ip }}</a>
+                       target="_blank">{{ server.private_ip || '-' }}</a>
                 </td>
-                <td>{{ server.launched_at }}</td>
+                <td>{{ server.launched_at || '-' }}</td>
                 <td>
                     <v-row>
                         <v-spacer></v-spacer>
-                        <ServerUpdateDialog v-bind:name=server.name @updated="updateServer"/>
+                        <ServerUpdateDialog v-bind:server=server @updated="updateServer"/>
                         <v-spacer></v-spacer>
-                        <ServerDeleteDialog v-bind:name=server.name @deleted="deleteServer"/>
+                        <ServerDeleteDialog v-bind:id=server.id @deleted="deleteServer"/>
                         <v-spacer></v-spacer>
                     </v-row>
                 </td>
@@ -120,6 +121,8 @@
 </style>
 
 <script>
+import {useAlertStore} from '@/stores/alert.store.js';
+
 import ServerService from "@/services/server"
 import ServerCreateDialog from "@/views/server/ServerCreateDialog.vue"
 import ServerDeleteDialog from "@/views/server/ServerDeleteDialog.vue"
@@ -128,38 +131,60 @@ import ServerUpdateDialog from "@/views/server/ServerUpdateDialog.vue"
 export default {
     name: 'Servers',
     components: {ServerDeleteDialog, ServerCreateDialog, ServerUpdateDialog},
-    created() {
-        this.fetchServerConfigs()
-        this.fetchServers()
-        this.fetchServersLimit()
+    async created() {
+        await this.fetchServerConfigs()
+        await this.fetchServersLimit()
+        await this.fetchServers()
     },
     data() {
         return {
             configs: [],
             servers: [],
             serverLimit: 0,
+            loading: true,
         }
     },
     methods: {
-        fetchServerConfigs() {
-            this.configs = ServerService.getConfigs()
+        async fetchServerConfigs() {
+            try {
+                this.configs = await ServerService.getConfigs()
+            } catch (error) {
+                useAlertStore().error(error);
+            }
         },
-        fetchServers() {
-            this.servers = ServerService.getServers()
+        async fetchServers() {
+            try {
+                this.servers = await ServerService.getServers()
+            } catch (error) {
+                useAlertStore().error(error);
+            }
         },
-        fetchServersLimit() {
-            this.serverLimit = ServerService.getServersLimit()
+        async fetchServersLimit() {
+            try {
+                this.serverLimit = await ServerService.getServersLimit()
+            } catch (error) {
+                useAlertStore().error(error);
+            }
         },
-        createdServer() {
-            console.log("server created")
-            this.fetchServers()
+        async createdServer() {
+            await this.fetchServers()
         },
-        updateServer(name) {
-            console.log("server updated " + name)
+        async updateServer(id) {
+            await this.fetchServers()
         },
-        deleteServer(name) {
-            console.log("server deleted " + name)
+        async deleteServer(id) {
+            console.log("delete")
+            await this.fetchServers()
         },
+        get_config_name() {
+            let configNames = []
+
+            for (let config of this.configs) {
+                configNames.push(config.name)
+            }
+
+            return configNames
+        }
     }
 }
 </script>
