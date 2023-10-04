@@ -12,15 +12,6 @@
         ></v-img>
       </router-link>
 
-    <v-toolbar dense>
-        <v-spacer></v-spacer>
-        <router-link to="/">
-            <v-img
-                src="/src/assets/logo.full.svg"
-                width="150"
-                max-width="150"
-            ></v-img>
-        </router-link>
 
         <v-spacer></v-spacer>
         <v-btn

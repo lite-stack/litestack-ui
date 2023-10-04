@@ -42,15 +42,15 @@ export default {
 
         <p>Вхід в обліковий запис</p>
       </div>
-      <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }" class="auth-form">
+      <Form @submit="login" :validation-schema="schema" v-slot="{ errors, isSubmitting }" class="auth-form">
         <div class="form-group">
           <label>Ім'я користувача</label>
-          <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }" />
+          <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }" v-model="user.username" />
           <div class="invalid-feedback">{{errors.username}}</div>
         </div>
         <div class="form-group">
           <label>Пароль</label>
-          <Field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" />
+          <Field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" v-model="user.password" />
           <div class="invalid-feedback">{{errors.password}}</div>
         </div>
 
@@ -134,30 +134,3 @@ export default {
     color: rgba(89, 164, 124, 0.8);
   }
 </style>
-    <div class="card m-3">
-        <h4 class="card-header">Login</h4>
-        <div class="card-body">
-            <Form @submit="login" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
-                <div class="form-group">
-                    <label>Username</label>
-                    <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }"
-                           v-model="user.username"/>
-                    <div class="invalid-feedback">{{ errors.username }}</div>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <Field name="password" type="password" class="form-control"
-                           :class="{ 'is-invalid': errors.password }" v-model="user.password"/>
-                    <div class="invalid-feedback">{{ errors.password }}</div>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary" :disabled="isSubmitting">
-                        <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
-                        Login
-                    </button>
-                    <router-link to="register" class="btn btn-link">Register</router-link>
-                </div>
-            </Form>
-        </div>
-    </div>
-</template>

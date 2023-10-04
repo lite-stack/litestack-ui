@@ -1,6 +1,7 @@
 <template>
     <v-row
         align="start"
+    class="pa-2 ma-2"
     >
         <v-col
             cols="3"
