@@ -1,14 +1,12 @@
 <template>
     <v-app>
 
-      <Header v-if="authStore.user"/>
+      <Header v-if="authStore.isLogged"/>
 
-
-      <Alert/>
+      <Alert v-if="authStore.isLogged"/>
       <router-view></router-view>
 
-
-      <Footer v-if="authStore.user"/>
+      <Footer v-if="authStore.isLogged"/>
     </v-app>
 </template>
 
@@ -22,4 +20,7 @@ import Alert from "@/components/Alert.vue";
 const authStore = useAuthStore();
 </script>
 
+<style>
+@import './assets/css/global.css';
+</style>
 

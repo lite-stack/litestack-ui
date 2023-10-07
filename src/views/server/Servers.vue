@@ -38,8 +38,7 @@
             class="elevation-1"
             :key="servers">
             <template v-slot:top>
-                <v-toolbar class="px-2"
-                >
+                <v-toolbar>
                     <v-toolbar-title class="text-h4 text--primary text-primary">
                         Сервери
                         <v-chip color="primary">{{ servers.length }} / {{ serverLimit }}</v-chip>
@@ -173,7 +172,6 @@ export default {
             await this.fetchServers()
         },
         async deleteServer(id) {
-            console.log("delete")
             await this.fetchServers()
         },
         get_config_name() {

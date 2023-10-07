@@ -1,7 +1,7 @@
 <template>
     <v-row
         align="start"
-    class="pa-2 ma-2"
+        class="pa-2 ma-2"
     >
         <v-col
             cols="3"
@@ -161,11 +161,9 @@ export default {
         },
         getServerActions() {
             this.actions = ServerService.getServerActions()
-            console.log(this.actions)
         },
         goToServers() {
             console.log('lol')
-            this.$router.push('/servs')
         },
         toTitle(str) {
             return str.charAt(0).toUpperCase() + str.slice(1)

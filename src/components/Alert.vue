@@ -1,67 +1,68 @@
 <script setup>
-import { storeToRefs } from 'pinia';
+import {storeToRefs} from 'pinia';
 
-import { useAlertStore } from '@/stores/alert.store.js';
+import {useAlertStore} from '@/stores/alert.store.js';
 
 const alertStore = useAlertStore();
-const { alert } = storeToRefs(alertStore);
+const {alert} = storeToRefs(alertStore);
+
+const props = defineProps({
+  width: Number
+})
 
 window.onclick = (event) => {
-  if(event.target.matches('.alert-container')){
-    alertStore.clear()
-  }
+    if (event.target.matches('.alert-container')) {
+        alertStore.clear()
+    }
 }
-document.addEventListener('keydown', function(e) {
-  if(e.key === "Escape" ){
-    alertStore.clear()
-  }
+document.addEventListener('keydown', function (e) {
+    if (e.key === "Escape") {
+        alertStore.clear()
+    }
 });
 
 </script>
 
 <template>
-  <div v-if="alert" class="alert-container" >
-    <div class="alert-info alert-dismissable" :class="alert.type">
-      <button @click="alertStore.clear()" class="alert-btn">×</button>
-      <span>{{alert.message}}</span>
-    </div>
+    <v-container v-if="alert" class="alert-container d-flex justify-center">
+        <div class="alert-info alert-dismissable" :class="alert.type" :style='"width: " + (props.width || 50) + "%;"'>
+            <button @click="alertStore.clear()" class="alert-btn">×</button>
+            <span>{{ alert.message }}</span>
+        </div>
 
-  </div>
+    </v-container>
 </template>
 
 <style>
-  .alert-container{
-    position: fixed;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1;
-    height: 100%;
-    width: 100%;
+.alert-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+}
 
-  }
-  .alert-container .alert-info{
+.alert-container .alert-info {
     position: relative;
-    background: #1c1c1c;
+    background: var(--red);
     opacity: 0.9;
-    color: #f44336;
-    height: 200px;
-    width: 400px;
-    font-size: 22px;
-    border: 2px solid #222;
-    border-radius: 10px;
-  }
-  .alert-container .alert-info .alert-btn{
+    color: black;
+
+    padding: 20px;
+    font-size: 16px;
+}
+
+.alert-container .alert-info .alert-btn {
     position: absolute;
     right: 0;
-    margin-right: 15px;
-    font-size: 40px;
-  }
-  .alert-container .alert-info span{
+    top: 0;
+    margin: 0 15px;
+    font-size: 30px;
+}
+
+.alert-container .alert-info span {
     height: 100%;
     display: flex;
+    margin: 0 15px;
     align-items: center;
-    justify-content: center;
-  }
+    justify-content: flex-start;
+}
 </style>

@@ -28,7 +28,6 @@ class ServerService {
         let serversJson = await ServerAPI.getServers()
         let servers = []
         for (let serverJson of serversJson) {
-            console.log(serverJson)
             servers.push(new ServerBase(
                 serverJson['id'],
                 serverJson['name'],

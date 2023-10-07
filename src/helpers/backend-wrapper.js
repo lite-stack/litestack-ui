@@ -13,8 +13,6 @@ function backendWrapper() {
 
             function handleRoute() {
                 switch (true) {
-                   case url.endsWith('/users') && opts.method === 'GET':
-                        return getUsers();
                     case url.match(/\/users\/\d+$/) && opts.method === 'GET':
                         return getUserById();
                     case url.match(/\/users\/\d+$/) && opts.method === 'PUT':

@@ -44,7 +44,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/Instructions.vue')
+        component: () => import(/* webpackChunkName: "about" */ '../views/instructions/Instructions.vue')
     },
     { ...accountRoutes },
     { ...usersRoutes },
@@ -64,12 +64,18 @@ router.beforeEach(async (to) => {
 
     // redirect to login page if not logged in and trying to access a restricted page
     const publicPages = ['/account/login', '/account/register'];
+    const adminPages = ['/users'];
     const authRequired = !publicPages.includes(to.path);
+    const adminRequired = adminPages.includes(to.path);
     const authStore = useAuthStore();
 
-    if (authRequired && !authStore.user) {
+    if (authRequired && !authStore.auth) {
         authStore.returnUrl = to.fullPath;
         return '/account/login';
+    }
+
+    if (authRequired && adminRequired && !authStore.user.is_superuser) {
+        return '/servs';
     }
 });
 

@@ -1,51 +1,119 @@
-<script setup>
-import { storeToRefs } from 'pinia';
-
-import { useUsersStore } from '@/stores/users.store.js';
-
-const usersStore = useUsersStore();
-const { users } = storeToRefs(usersStore);
-
-usersStore.getAll();
-</script>
-
 <template>
-  <h1>Users</h1>
-  <router-link to="/users/add" class="btn btn-sm btn-success mb-2">Add User</router-link>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th style="width: 30%">First Name</th>
-      <th style="width: 30%">Last Name</th>
-      <th style="width: 30%">Username</th>
-      <th style="width: 10%"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <template v-if="users.length">
-      <tr v-for="user in users" :key="user.id">
-        <td>{{ user.firstName }}</td>
-        <td>{{ user.lastName }}</td>
-        <td>{{ user.username }}</td>
-        <td style="white-space: nowrap">
-          <router-link :to="`/users/edit/${user.id}`" class="btn btn-sm btn-primary mr-1">Edit</router-link>
-          <button @click="usersStore.delete(user.id)" class="btn btn-sm btn-danger btn-delete-user" :disabled="user.isDeleting">
-            <span v-if="user.isDeleting" class="spinner-border spinner-border-sm"></span>
-            <span v-else>Delete</span>
-          </button>
-        </td>
-      </tr>
-    </template>
-    <tr v-if="users.loading">
-      <td colspan="4" class="text-center">
-        <span class="spinner-border spinner-border-lg align-center"></span>
-      </td>
-    </tr>
-    <tr v-if="users.error">
-      <td colspan="4">
-        <div class="text-danger">Error loading users: {{users.error}}</div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+    <v-container>
+        <v-table
+            class="elevation-1"
+            :key="users">
+            <template v-slot:top>
+                <v-toolbar>
+                    <v-toolbar-title class="text-h4 text--primary text-primary">
+                        Користувачі
+                    </v-toolbar-title>
+
+                    <v-divider
+                        class="mx-4"
+                        inset
+                        vertical
+                    ></v-divider>
+                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                </v-toolbar>
+            </template>
+            <thead>
+            <tr>
+                <th class="text-left">
+                    ID
+                </th>
+                <th class="text-left">
+                    Пошта
+                </th>
+                <th class="text-left">
+                    Ім`я
+                </th>
+                <th class="text-left">
+                    Активний
+                </th>
+                <th class="text-left">
+                    Верифікований
+                </th>
+                <th class="text-center">
+                    Адмін
+                </th>
+                <th class="text-center">
+                    Дії
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr
+                v-for="user in users"
+                :key="user.id"
+            >
+                <td>
+                    {{ user.id }}
+                </td>
+                <td>{{ user.email || '-' }}</td>
+                <td>{{ user.username || '-' }}</td>
+                <td>
+                    <v-icon v-if="user.is_active" icon="mdi-check-circle" style="color:var(--green);"></v-icon>
+                    <v-icon v-else icon="mdi-close-circle" style="color:var(--red);"></v-icon>
+                </td>
+                <td>
+                    <v-icon v-if="user.is_verified" icon="mdi-check-circle" style="color:var(--green);"></v-icon>
+                    <v-icon v-else icon="mdi-close-circle" style="color:var(--red);"></v-icon>
+                </td>
+                <td>
+                    <v-icon v-if="user.is_superuser" icon="mdi-check-circle" style="color:var(--green);"></v-icon>
+                    <v-icon v-else icon="mdi-close-circle" style="color:var(--red);"></v-icon>
+                </td>
+                <td>
+                    <v-row>
+                        <v-spacer></v-spacer>
+                        <v-spacer></v-spacer>
+                        <DeleteDialog v-bind:id=user.id @deleted="deleteUser"/>
+                        <v-spacer></v-spacer>
+                    </v-row>
+                </td>
+            </tr>
+            </tbody>
+        </v-table>
+    </v-container>
 </template>
+
+
+<script>
+import {useAlertStore} from '@/stores/alert.store.js';
+
+import UserService from "@/services/user.js"
+import DeleteDialog from "@/views/users/DeleteDialog.vue"
+
+export default {
+    name: 'Users',
+    components: {DeleteDialog},
+    async created() {
+        await this.fetchUsers()
+    },
+    data() {
+        return {
+            users: [],
+            loading: true,
+        }
+    },
+    methods: {
+        async fetchUsers() {
+            this.loading = true;
+            try {
+                this.users = await UserService.getUsers()
+            } catch (error) {
+                useAlertStore().error(error);
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        async deleteUser(id) {
+            await this.fetchUsers()
+        },
+    }
+}
+</script>

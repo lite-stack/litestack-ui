@@ -37,10 +37,11 @@ function request(method) {
 
 function authHeader(url) {
     // return auth header with jwt if user is logged in and request is to the api url
-    const { user } = useAuthStore();
-    const isLoggedIn = !!user?.token;
+    const { user, auth } = useAuthStore();
+    const isLoggedIn = !!auth?.access_token;
+
     if (isLoggedIn) {
-        return { Authorization: `Bearer ${user.token}` };
+        return { Authorization: `Bearer ${auth.access_token}` };
     } else {
         return {};
     }
@@ -63,7 +64,7 @@ async function handleResponse(response) {
         }
 
         // get error message from body or default to response status
-        const error = (data && data.message) || response.status;
+        const error = (data && data.detail) || response.status;
         return Promise.reject(error);
     }
 

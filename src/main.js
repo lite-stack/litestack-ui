@@ -42,12 +42,12 @@ const vuetify = createVuetify({
     },
     directives,
     styles,
-    theme: {
-        defaultTheme: "customDarkTheme",
-        themes: {
-            customDarkTheme,
-        },
-    },
+//    theme: {
+//        defaultTheme: "customDarkTheme",
+//        themes: {
+//            customDarkTheme,
+//        },
+//    },
     icons: {
         defaultSet: 'mdi',
         aliases,
@@ -63,6 +63,7 @@ const vuetify = createVuetify({
                     primary: colors.teal.lighten1,
                     secondary: colors.blueGrey.lighten2,
                     red: colors.red.lighten1,
+                    dark: colors.grey.darken4
                 }
             },
         },

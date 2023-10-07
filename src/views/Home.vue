@@ -5,7 +5,7 @@
 
 
     <v-main>
-      <v-container>
+      <v-container >
         <Alert/>
         Hi {{authUser?.username || "unknown user"}}!
         <!--<ul v-if="users.length">-->

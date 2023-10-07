@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 
 const schema = Yup.object().shape({
     email: Yup.string()
-        .required('Введіть прізвище').email(),
+        .required('Введіть прізвище').email('Невалідна пошта'),
     username: Yup.string()
         .required("Введіть ім'я користувача"),
     password: Yup.string()
@@ -15,13 +15,16 @@ const schema = Yup.object().shape({
 
 <script>
 import User from '@/models/user.js'
+import Alert from '@/components/Alert.vue'
 
 import {useAuthStore} from '@/stores/auth.store.js';
 import {useAlertStore} from '@/stores/alert.store.js';
 
 export default {
     name: 'Register',
-    components: {},
+    components: {
+        Alert,
+    },
     data() {
         return {
             user: new User(),
@@ -49,6 +52,7 @@ export default {
 
                 <p>Реєстрація облікового запису</p>
             </div>
+            <Alert v-bind:width="90"/>
             <Form @submit="register" :validation-schema="schema" v-slot="{ errors, isSubmitting }" class="auth-form">
 
                 <div class="form-group">

@@ -3,14 +3,14 @@
         color="#222222"
         dark
     >
-      <router-link to="/">
-        <v-img
-            src="../src/assets/logo-full-white.svg"
-            width="150"
-            max-width="150"
-            class="mx-8"
-        ></v-img>
-      </router-link>
+        <router-link to="/">
+            <v-img
+                src="../src/assets/logo-full-white.svg"
+                width="150"
+                max-width="150"
+                class="mx-8"
+            ></v-img>
+        </router-link>
 
 
         <v-spacer></v-spacer>
@@ -25,18 +25,20 @@
         </v-btn>
 
 
-
         <v-spacer></v-spacer>
 
         <div class="d-flex justify-space-around align-center" style="width:250px; max-width:350px">
             <v-btn
-                v-if="!authStore.user" to="/login"
+                v-if="!authStore.isLogged" to="/login"
                 class="mx-4"
                 icon="mdi-login"
                 variant="plain"
             ></v-btn>
-            <v-btn v-if="authStore.user" to="/users" class="nav-item nav-link">Корстувачі</v-btn>
-            <v-btn v-if="authStore.user" @click="authStore.logout()" class="btn btn-link nav-item nav-link"  icon="mdi-logout"></v-btn>
+            <v-btn v-if="authStore.isLogged && authStore.user.is_superuser" to="/users" class="nav-item nav-link">
+                Корстувачі
+            </v-btn>
+            <v-btn v-if="authStore.isLogged" @click="authStore.logout()" class="btn btn-link nav-item nav-link"
+                   icon="mdi-logout"></v-btn>
         </div>
         <v-spacer></v-spacer>
 
