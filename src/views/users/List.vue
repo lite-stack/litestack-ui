@@ -46,7 +46,7 @@
             </thead>
             <tbody>
             <tr
-                v-for="user in users"
+                v-for="user in withoutMe"
                 :key="user.id"
             >
                 <td>
@@ -69,6 +69,7 @@
                 <td>
                     <v-row>
                         <v-spacer></v-spacer>
+                        <UpdateDialog v-bind:user=user @updated="updateUser"/>
                         <v-spacer></v-spacer>
                         <DeleteDialog v-bind:id=user.id @deleted="deleteUser"/>
                         <v-spacer></v-spacer>
@@ -82,22 +83,29 @@
 
 
 <script>
-import {useAlertStore} from '@/stores/alert.store.js';
-
 import UserService from "@/services/user.js"
+import UpdateDialog from "@/views/users/UpdateDialog.vue"
 import DeleteDialog from "@/views/users/DeleteDialog.vue"
+import {useAuthStore} from '@/stores/auth.store.js';
+import {useAlertStore} from '@/stores/alert.store.js';
 
 export default {
     name: 'Users',
-    components: {DeleteDialog},
+    components: {UpdateDialog, DeleteDialog},
     async created() {
         await this.fetchUsers()
     },
     data() {
         return {
+            authStore: useAuthStore(),
             users: [],
             loading: true,
         }
+    },
+    computed: {
+        withoutMe: function () {
+            return this.users.filter(u => u.id !== this.authStore.user.id)
+        },
     },
     methods: {
         async fetchUsers() {
@@ -112,7 +120,18 @@ export default {
         },
 
         async deleteUser(id) {
-            await this.fetchUsers()
+            try {
+                await this.fetchUsers()
+            } catch (error) {
+                useAlertStore().error(error);
+            }
+        },
+        async updateUser(id) {
+            try {
+                await this.fetchUsers()
+            } catch (error) {
+                useAlertStore().error(error);
+            }
         },
     }
 }

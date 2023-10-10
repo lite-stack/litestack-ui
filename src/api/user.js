@@ -7,10 +7,18 @@ class UserAPI {
         return await fetchWrapper.get(`${this.baseUrl}/me`);
     }
     
+    async updateMe(user) {
+        await fetchWrapper.patch(`${this.baseUrl}/me`, user);
+    }
+
     async getUsers() {
         return await fetchWrapper.get(this.baseUrl);
     }
     
+    async updateUser(id, user) {
+        await fetchWrapper.patch(`${this.baseUrl}/${id}`, user);
+    }
+
     async deleteUser(id) {
         await fetchWrapper.delete(`${this.baseUrl}/${id}`);
     }

@@ -6,3 +6,7 @@
 .invalid-feedback {
     color: var(--red);
 }
+
+.card-text {
+    font-size: 1rem !important;
+}

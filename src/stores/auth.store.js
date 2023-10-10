@@ -37,7 +37,14 @@ export const useAuthStore = defineStore({
                 }
                 return;
             }
+            
+           await this.getMe();
 
+            // redirect to previous url or default to home page
+            await router.push(this.returnUrl || '/servs');
+        },
+        async getMe() {
+            const alertStore = useAlertStore();
             try {
                 // get additional user info
                 let userInfo = await UserAPI.getMe();
@@ -45,10 +52,7 @@ export const useAuthStore = defineStore({
                 localStorage.setItem('user', JSON.stringify(userInfo));
             } catch (error) {
                 alertStore.error(error);
-                return;
             }
-            // redirect to previous url or default to home page
-            await router.push(this.returnUrl || '/servs');
         },
         async logout() {
             this.user = null;

@@ -34,8 +34,10 @@
                 icon="mdi-login"
                 variant="plain"
             ></v-btn>
-            <v-btn v-if="authStore.isLogged && authStore.user.is_superuser" to="/users" class="nav-item nav-link">
-                Корстувачі
+            <v-btn v-if="authStore.isLogged" to="/users/me" class="nav-item nav-link">
+                Аккаунт
+                <span v-if="authStore.user.is_superuser">&nbsp;та користувачі
+                </span>
             </v-btn>
             <v-btn v-if="authStore.isLogged" @click="authStore.logout()" class="btn btn-link nav-item nav-link"
                    icon="mdi-logout"></v-btn>

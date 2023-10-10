@@ -20,7 +20,32 @@ class UserService {
 
         return users
     }
+
+    async updateUser(id, username, email, password, isActive, isSuperuser) {
+        let user = {
+            "username": username,
+            "email": email,
+            "is_active": isActive,
+            "is_superuser": isSuperuser
+        }
+        if (password !== "") {
+            user["password"] = password
+        }
+        return UserAPI.updateUser(id, user)
+    }
     
+    async updateMe(username, email, password) {
+        let user = {
+            "username": username,
+            "email": email,
+        }
+        if (password !== "") {
+            user["password"] = password
+        }
+
+        return UserAPI.updateMe(user)
+    }
+
     async deleteUser(id) {
         return UserAPI.deleteUser(id);
     }
