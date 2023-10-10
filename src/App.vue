@@ -1,12 +1,12 @@
 <template>
     <v-app>
 
-      <Header v-if="authStore.isLogged"/>
-
-      <Alert v-if="authStore.isLogged"/>
-      <router-view></router-view>
-
-      <Footer v-if="authStore.isLogged"/>
+        <Header v-if="authStore.isLogged"/>
+        <v-main>
+            <Alert v-if="authStore.isLogged"/>
+            <router-view></router-view>
+        </v-main>
+        <Footer v-if="authStore.isLogged"/>
     </v-app>
 </template>
 
@@ -14,7 +14,7 @@
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 
-import { useAuthStore } from '@/stores/auth.store.js';
+import {useAuthStore} from '@/stores/auth.store.js';
 import Alert from "@/components/Alert.vue";
 
 const authStore = useAuthStore();

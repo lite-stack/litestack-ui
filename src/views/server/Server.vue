@@ -17,9 +17,19 @@
                             Базова інофрмація
                         </div>
                         <div class="text-caption" v-for="(value, name) in server">
-                            <div v-if="name !== 'full_info' && name !== 'metadata' && value !== null">
-                                <span class="font-weight-bold">{{ toTitle(name) }}</span>: <span
-                                class="field_value">{{ value }}</span>
+                            <div v-if="serverMapLable[name] && value !== null">
+                                <span class="font-weight-bold card-text">{{
+                                        serverMapLable[name] || toTitle(name)
+                                    }}</span>:
+                                <span class="field_value card-text" v-if="name==='status'">{{
+                                        server.getStatus()
+                                    }}</span>
+                                <span class="field_value card-text"
+                                      v-else-if="(name==='public_ip' || name==='private_ip') && value !== ''">
+                                    <a :href='"http://" + server.public_ip' class="text-decoration-none"
+                                       target="_blank">{{ value }}</a>
+                                </span>
+                                <span class="field_value card-text" v-else>{{ value || '-' }}</span>
                             </div>
 
                         </div>
@@ -35,6 +45,7 @@
                         variant="tonal"
                         color="primary"
                         append-icon="mdi-menu-down"
+                        :loading="loading"
                     >
                         Дії
                         <v-menu activator="parent">
@@ -43,6 +54,7 @@
                                     v-for="(item, index) in actions"
                                     :key="index"
                                     :value="index"
+                                    @click="setServerStatus(item)"
                                 >
                                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                                 </v-list-item>
@@ -50,6 +62,52 @@
                         </v-menu>
                     </v-btn>
                 </v-card-actions>
+            </v-card>
+            <v-spacer class="ma-8"></v-spacer>
+            <v-card
+                variant="tonal"
+                color="bg-secondary"
+            >
+                <v-card-item>
+                    <div>
+                        <div class="text-overline mb-1">
+                            Конфігурація обладнання
+                        </div>
+                        <div class="text-caption" v-for="(value, name) in server.flavor">
+                            <div v-if="flavorMapLable[name]">
+                                <span class="font-weight-bold card-text">{{
+                                        flavorMapLable[name] || toTitle(name)
+                                    }}</span>: <span class="field_value card-text">{{ value || '-' }}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </v-card-item>
+            </v-card>
+            <v-spacer class="ma-8"></v-spacer>
+            <v-card
+                variant="tonal"
+                color="bg-secondary"
+            >
+                <v-card-item>
+                    <div>
+                        <div class="text-overline mb-1">
+                            Образ
+                        </div>
+                        <div class="text-caption" v-for="(value, name) in server.image">
+                            <div v-if="imageMapLable[name]">
+                                <span class="font-weight-bold card-text">{{
+                                        imageMapLable[name] || toTitle(name)
+                                    }}</span>:
+                                <span class="field_value card-text" v-if="name==='status'">{{
+                                        server.getStatus()
+                                    }}</span>
+                                <span class="field_value card-text" v-else>{{ value || '-' }}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </v-card-item>
             </v-card>
         </v-col>
         <v-col
@@ -103,7 +161,7 @@
                             Метадані
                         </div>
                         <div class="text-caption">
-                            <vue-json-pretty :data=JSON.parse(server.metadata) showLineNumber
+                            <vue-json-pretty :data=JSON.parse(server.metadata) showLineNumber :deep=0
                                              showIcon/>
                         </div>
                     </div>
@@ -133,6 +191,7 @@
 </template>
 
 <script>
+import {useAlertStore} from '@/stores/alert.store.js';
 import VueJsonPretty from 'vue-json-pretty';
 import ServerService from "@/services/server"
 import ServerCreateDialog from "@/views/server/ServerCreateDialog.vue"
@@ -153,11 +212,63 @@ export default {
                 id: this.$route.params.id,
             },
             actions: [],
+            loading: false,
+            serverMapLable: {
+                "id": "Ідентифікатор",
+                "name": "Назва",
+                "status": "Статус",
+                "public_ip": "Публічна IP-адреса",
+                "private_ip": "Приватна IP-адреса",
+                "launched_at": "Запущено о",
+                "terminated_at": "Вбито о",
+                "description": "Опис",
+                "created_at": "Створено о",
+                "updated_at": "Оновлено о",
+            },
+            flavorMapLable: {
+                "name": "Назва",
+                "description": "Опис",
+                "ram": "RAM (Мб)",
+                "vcpus": "Віртуальні процесори",
+                "disk_size": "Розмір диска (Гб)",
+                "swap_size": "Розмір SWAP (Мб)",
+                "ephemeral_size": "Ефемерний диск (Гб)",
+            },
+            imageMapLable: {
+                "name": "Назва",
+                "min_disk_size": "Мінімальний розмір диску (Гб)",
+                "min_ram_size": "Мінімальний розмір RAM (Мб)",
+                "status": "Статус",
+                "size": "Розмір (б)",
+            },
         }
     },
     methods: {
         async fetchServer(id) {
-            this.server = await ServerService.getServer(id)
+            try {
+                this.server = await ServerService.getServer(id)
+            } catch (error) {
+                useAlertStore().error(error);
+            }
+        },
+        async setServerStatus(actionItem) {
+            this.loading = true
+            try {
+                await ServerService.actServer(this.server.id, actionItem.action)
+                await this.fetchServer(this.server.id)
+                useAlertStore().success('Дія успішно виконана');
+            } catch (error) {
+                switch (error) {
+                    case 'Invalid status':
+                        useAlertStore().error('Неможлива дія при даному статусі машини');
+                        break;
+                    default:
+                        useAlertStore().error(error);
+                        break;
+                }
+            } finally {
+                this.loading = false
+            }
         },
         getServerActions() {
             this.actions = ServerService.getServerActions()

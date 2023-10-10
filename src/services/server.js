@@ -54,8 +54,8 @@ class ServerService {
             serverJson['launched_at'],
             serverJson['terminated_at'],
             serverJson['description'],
-            serverJson['flavor']['name'],
-            serverJson['image']['name'],
+            serverJson['flavor'],
+            serverJson['image'],
             [],
             serverJson['created_at'],
             serverJson['updated_at'],
@@ -82,6 +82,12 @@ class ServerService {
     
     async updateServer(server) {
         await ServerAPI.updateServer(server);
+    }
+
+    async actServer(id, action) {
+        await ServerAPI.actServer(id, {
+            "action": action
+        });
     }
 }
 

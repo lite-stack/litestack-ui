@@ -13,7 +13,7 @@
             >
                 <v-card
                     class="ma-3 d-flex flex-column pa-2"
-                    max-width="330"
+                    max-width="450"
                     variant="tonal"
                 >
                     <v-card-text>

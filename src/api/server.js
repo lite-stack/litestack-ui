@@ -20,15 +20,19 @@ class ServerAPI {
     }
     
     async createServer(server) {
-        return await fetchWrapper.post(`${this.baseUrl}/from_configuration`, server);
+        await fetchWrapper.post(`${this.baseUrl}/from_configuration`, server);
     }
     
     async updateServer(server) {
-        return await fetchWrapper.patch(`${this.baseUrl}/${server.id}`, server);
+        await fetchWrapper.patch(`${this.baseUrl}/${server.id}`, server);
     }
     
     async deleteServer(id) {
         await fetchWrapper.delete(`${this.baseUrl}/${id}`);
+    }
+
+    async actServer(id, action) {
+        await fetchWrapper.patch(`${this.baseUrl}/${id}/state`, action);
     }
 }
 

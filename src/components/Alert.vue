@@ -42,12 +42,19 @@ document.addEventListener('keydown', function (e) {
 
 .alert-container .alert-info {
     position: relative;
-    background: var(--red);
     opacity: 0.9;
     color: black;
 
     padding: 20px;
     font-size: 16px;
+}
+
+.alert-container .alert-danger {
+    background: var(--red);
+}
+
+.alert-container .alert-success {
+    background: var(--green);
 }
 
 .alert-container .alert-info .alert-btn {
