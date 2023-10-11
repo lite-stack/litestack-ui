@@ -1,4 +1,3 @@
-import { createApp } from 'vue'
 import router from "@/router/index.js";
 import { createPinia } from 'pinia'
 
@@ -24,13 +23,10 @@ const customDarkTheme = {
     dark: true,
     colors: {
         background: "#23242a",
-        // surface: "#15202b",
-        // primary: "#3f51b5",
-        // secondary: "#03dac6",
-        // error: "#f44336",
-        // info: "#2196F3",
-        // success: "#4caf50",
-        // warning: "#fb8c00",
+        // primary: colors.teal.lighten1,
+        // secondary: colors.blueGrey.lighten2,
+        // red: colors.red.lighten1,
+        // dark: colors.grey.darken4
     },
 };
 
@@ -70,8 +66,11 @@ const vuetify = createVuetify({
     },
 })
 
+
+
 // setup fake backend
 import { backendWrapper } from '@/helpers/backend-wrapper.js';
+import {createApp} from "vue";
 backendWrapper();
 
 const app = createApp(App);
@@ -82,3 +81,5 @@ app.use(router);
 app.use(pinia);
 
 app.mount("#app");
+
+
