@@ -52,8 +52,8 @@
          <router-link class="navbar-links" v-for="link in links" :key="link" :to="link[1]">{{link[0]}}</router-link>
       </div>
       <div class="navbar-btn">
-         <router-link v-if="authStore.isLogged" to="/users/me" class="material-symbols-outlined">person</router-link>
-         <router-link v-if="authStore.user.is_superuser" to="/users/me" class="material-symbols-outlined">supervisor_account</router-link>
+         <router-link v-if="authStore.isLogged && authStore.user.is_superuser" to="/users/me" class="material-symbols-outlined">supervisor_account</router-link>
+         <router-link v-else-if="authStore.isLogged" to="/users/me" class="material-symbols-outlined">person</router-link>
          <button v-if="authStore.isLogged" @click="authStore.logout()" class="material-symbols-outlined">logout</button>
       </div>
    </nav>

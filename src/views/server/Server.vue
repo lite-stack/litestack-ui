@@ -37,30 +37,46 @@
                 </v-card-item>
 
                 <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <ServerUpdateDialog v-bind:server=server @updated="fetchServer"/>
-                    <ServerDeleteDialog v-bind:id=server.id @deleted="goToServers"/>
-                    <v-btn
-                        class="mb-2"
-                        variant="tonal"
-                        color="primary"
-                        append-icon="mdi-menu-down"
-                        :loading="loading"
-                    >
-                        Дії
-                        <v-menu activator="parent">
-                            <v-list>
-                                <v-list-item
-                                    v-for="(item, index) in actions"
-                                    :key="index"
-                                    :value="index"
-                                    @click="setServerStatus(item)"
-                                >
-                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                                </v-list-item>
-                            </v-list>
-                        </v-menu>
-                    </v-btn>
+                    <v-col>
+
+                        <v-row>
+                            <v-btn
+                                class="mb-2"
+                                variant="tonal"
+                                color="primary"
+                                append-icon="mdi-menu-down"
+                                :loading="loading"
+                            >
+                                Дії
+                                <v-menu activator="parent">
+                                    <v-list>
+                                        <v-list-item
+                                            v-for="(item, index) in actions"
+                                            :key="index"
+                                            :value="index"
+                                            @click="setServerStatus(item)"
+                                        >
+                                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
+                            </v-btn>
+
+                            <v-btn class="mb-2"
+                                   variant="tonal"
+                                   color="primary"
+                                   @click="openConsole"
+                            >
+                                Консоль
+                            </v-btn>
+                            <WindowPortal v-bind:open="consoleIsOpened" v-bind:url="consoleURL" @closed="closeConsole"/>
+                        </v-row>
+                        <v-row>
+                            <ServerUpdateDialog v-bind:server=server @updated="fetchServer"/>
+                            <ServerDeleteDialog v-bind:id=server.id @deleted="goToServers"/>
+                        </v-row>
+
+                    </v-col>
                 </v-card-actions>
             </v-card>
             <v-spacer class="ma-8"></v-spacer>
@@ -197,11 +213,11 @@ import ServerService from "@/services/server"
 import ServerCreateDialog from "@/views/server/ServerCreateDialog.vue"
 import ServerDeleteDialog from "@/views/server/ServerDeleteDialog.vue"
 import ServerUpdateDialog from "@/views/server/ServerUpdateDialog.vue"
-
+import WindowPortal from '@/components/WindowPortal.vue';
 
 export default {
     name: 'Server',
-    components: {ServerDeleteDialog, ServerCreateDialog, ServerUpdateDialog, VueJsonPretty},
+    components: {ServerDeleteDialog, ServerCreateDialog, ServerUpdateDialog, WindowPortal, VueJsonPretty},
     async created() {
         await this.fetchServer(this.$route.params.id)
         this.getServerActions()
@@ -241,6 +257,8 @@ export default {
                 "status": "Статус",
                 "size": "Розмір (б)",
             },
+            consoleIsOpened: false,
+            consoleURL: ''
         }
     },
     methods: {
@@ -275,6 +293,13 @@ export default {
         },
         goToServers() {
             console.log('lol')
+        },
+        openConsole() {
+            this.consoleURL = "http://192.168.56.13:6080/vnc_lite.html?path=%3Ftoken%3Db607ec62-66ba-4ccd-a1d2-c134924b10e5"
+            this.consoleIsOpened = true;
+        },
+        closeConsole() {
+            this.consoleIsOpened = false;
         },
         toTitle(str) {
             return str.charAt(0).toUpperCase() + str.slice(1)
