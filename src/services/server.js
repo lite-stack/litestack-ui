@@ -64,6 +64,11 @@ class ServerService {
         )
     }
 
+    async getServerConsoleURL(id) {
+        let console = await ServerAPI.getServerConsole(id)
+        return console.url || ''
+    }
+
     getServerActions() {
         return this.actions;
     }

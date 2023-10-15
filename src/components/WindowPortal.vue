@@ -35,23 +35,21 @@ export default {
             }
         },
         url(newURL) {
-            this.$props.url = newURL;
         }
     },
     methods: {
         openPortal() {
             if (this.$props.url !== '') {
-                this.windowRef = window.open(this.$props.url, "", "width=800,height=600,left=200,top=200");
+                this.windowRef = window.open(this.$props.url, "", "width=1024,height=768,left=200,top=200");
                 this.windowRef.addEventListener('beforeunload', this.closePortal);
             }
         },
         closePortal() {
-            console.log('close portal')
-            if (this.windowRef) {
-                this.windowRef.close();
-                this.windowRef = null;
-                this.$emit('closed');
-            }
+//            if (this.windowRef) {
+//                this.windowRef.close();
+//                this.windowRef = null;
+//                this.$emit('closed');
+//            }
         }
     },
     mounted() {
@@ -59,15 +57,5 @@ export default {
             this.openPortal();
         }
     },
-    beforeDestroy() {
-        if (this.windowRef) {
-            this.closePortal();
-        }
-    },
-    destroyed() {
-        if (this.windowRef) {
-            this.closePortal();
-        }
-    }
 }
 </script>

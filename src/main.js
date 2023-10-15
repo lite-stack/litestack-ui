@@ -67,7 +67,6 @@ const vuetify = createVuetify({
 })
 
 
-
 // setup fake backend
 import { backendWrapper } from '@/helpers/backend-wrapper.js';
 import {createApp} from "vue";

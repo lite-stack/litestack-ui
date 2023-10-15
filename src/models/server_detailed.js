@@ -19,13 +19,16 @@ class ServerDetailed extends ServerBase {
         ) {
         super(id, name, status, public_ip, private_ip, launched_at, terminated_at);
         this.description=description;
-        this.flavor=new Flavour(flavor);
-        this.image=new Image(image);
         this.volumes=volumes;
         this.created_at=created_at;
         this.updated_at=updated_at;
         this.metadata=metadata;
         this.full_info=full_info;
+        this.flavor=new Flavour(flavor);
+        if (image) {
+            this.image=new Image(image);
+        };
+
     }
 }
 

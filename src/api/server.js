@@ -15,10 +15,14 @@ class ServerAPI {
         return await fetchWrapper.get(`${this.baseUrl}/${id}`);
     }
     
+    async getServerConsole(id) {
+        return await fetchWrapper.get(`${this.baseUrl}/${id}/console-url`);
+    }
+
     async getServersLimit() {
         return await fetchWrapper.get(`${this.baseUrl}/limit`);
     }
-    
+
     async createServer(server) {
         await fetchWrapper.post(`${this.baseUrl}/from_configuration`, server);
     }

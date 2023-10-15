@@ -61,15 +61,26 @@
                                     </v-list>
                                 </v-menu>
                             </v-btn>
+                            <div class="ml-2 d-flex justify-center align-baseline">
+                                <v-btn class="mb-2"
+                                       variant="tonal"
+                                       color="primary"
+                                       @click="openConsole"
+                                >
+                                <span class="mr-2">
+                                    Консоль
+                                </span>
+                                    <v-tooltip
+                                        text="Стандартні логін і пароль користувача будуть вказані при вході в консоль">
+                                        <template v-slot:activator="{ props }">
+                                            <v-icon v-bind="props" icon="mdi-information" color="primary"></v-icon>
+                                        </template>
+                                    </v-tooltip>
+                                </v-btn>
 
-                            <v-btn class="mb-2"
-                                   variant="tonal"
-                                   color="primary"
-                                   @click="openConsole"
-                            >
-                                Консоль
-                            </v-btn>
-                            <WindowPortal v-bind:open="consoleIsOpened" v-bind:url="consoleURL" @closed="closeConsole"/>
+                                <WindowPortal v-bind:open="consoleIsOpened" v-bind:url="consoleURL"
+                                              @closed="closeConsole"/>
+                            </div>
                         </v-row>
                         <v-row>
                             <ServerUpdateDialog v-bind:server=server @updated="fetchServer"/>
@@ -104,6 +115,7 @@
             <v-card
                 variant="tonal"
                 color="bg-secondary"
+                v-if="server.image"
             >
                 <v-card-item>
                     <div>
@@ -129,43 +141,6 @@
         <v-col
             class="pa-2 ma-2"
         >
-            <v-card
-                variant="tonal"
-                color="bg-secondary"
-            >
-                <v-card-item>
-                    <div>
-                        <div class="text-overline mb-1">
-                            big block
-                        </div>
-                        <div class="text-caption">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut
-                            labore et dolore magna aliqua. Laoreet id donec ultrices tincidunt arcu non sodales
-                            neque.
-                            Interdum velit laoreet id donec. Pharetra diam sit amet nisl suscipit adipiscing
-                            bibendum.
-                            Leo integer malesuada nunc vel risus commodo viverra maecenas. Auctor augue mauris augue
-                            neque. Vestibulum lectus mauris ultrices eros in cursus turpis massa tincidunt. Eget
-                            nullam
-                            non nisi est sit amet. Massa tincidunt dui ut ornare lectus sit amet. Bibendum at varius
-                            vel
-                            pharetra vel. Sed egestas egestas fringilla phasellus.
-                            Turpis cursus in hac habitasse platea. Sit amet porttitor eget dolor morbi non arcu.
-                            Fringilla est ullamcorper eget nulla facilisi. In ante metus dictum at tempor commodo.
-                            Sed
-                            arcu non odio euismod lacinia at quis risus sed. Semper quis lectus nulla at volutpat
-                            diam
-                            ut venenatis. Ultrices tincidunt arcu non sodales. Faucibus scelerisque eleifend donec
-                            pretium vulputate sapien nec sagittis. Sed vulputate odio ut enim blandit. Felis donec
-                            et
-                            odio pellentesque diam volutpat. Ac tincidunt vitae semper quis lectus nulla at volutpat
-                            diam.
-                        </div>
-                    </div>
-                </v-card-item>
-            </v-card>
-            <v-spacer class="mt-8"></v-spacer>
             <v-card
                 variant="tonal"
                 color="bg-secondary"
@@ -196,7 +171,7 @@
                         </div>
                         <div class="text-caption">
                             <vue-json-pretty :data=JSON.parse(server.full_info) showLineNumber
-                                             showIcon virtual/>
+                                             showIcon height=635 virtual/>
                         </div>
                     </div>
                 </v-card-item>
@@ -266,7 +241,13 @@ export default {
             try {
                 this.server = await ServerService.getServer(id)
             } catch (error) {
-                useAlertStore().error(error);
+                switch (error) {
+                    case 'Server not found':
+                        this.$router.push('/servs');
+                        break;
+                    default:
+                        useAlertStore().error(error);
+                }
             }
         },
         async setServerStatus(actionItem) {
@@ -280,6 +261,9 @@ export default {
                     case 'Invalid status':
                         useAlertStore().error('Неможлива дія при даному статусі машини');
                         break;
+                    case 'Server not found':
+                        this.$router.push('/servs');
+                        break;
                     default:
                         useAlertStore().error(error);
                         break;
@@ -292,14 +276,16 @@ export default {
             this.actions = ServerService.getServerActions()
         },
         goToServers() {
-            console.log('lol')
+            this.$router.push('/servs');
         },
-        openConsole() {
-            this.consoleURL = "http://192.168.56.13:6080/vnc_lite.html?path=%3Ftoken%3Db607ec62-66ba-4ccd-a1d2-c134924b10e5"
+        async openConsole() {
+            this.closeConsole();
+            this.consoleURL = await ServerService.getServerConsoleURL(this.server.id);
             this.consoleIsOpened = true;
         },
         closeConsole() {
             this.consoleIsOpened = false;
+            this.consoleURL = '';
         },
         toTitle(str) {
             return str.charAt(0).toUpperCase() + str.slice(1)
@@ -307,13 +293,3 @@ export default {
     }
 }
 </script>
-
-
-<style scoped>
-.field_name {
-    font-weight: bold;
-}
-
-.field_value {
-}
-</style>

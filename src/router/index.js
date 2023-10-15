@@ -48,9 +48,9 @@ const routes = [
     },
     { ...accountRoutes },
     { ...usersRoutes },
-    {...serverRoutes },
-    { path: '/:pathMatch(.*)*', redirect: '/' }
-]
+    { ...serverRoutes },
+    { path: '/:pathMatch(.*)*', redirect: '/' },
+    ]
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     linkActiveClass: 'active',
