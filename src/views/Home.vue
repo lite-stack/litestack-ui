@@ -2,7 +2,7 @@
 
     <v-container>
         <Alert/>
-        <div class="text-h2 text-center">Огляд</div>
+        <div class="text-h4 text-center">Огляд</div>
         <div v-if="!loaded"
              class="d-flex align-center justify-center"
         >

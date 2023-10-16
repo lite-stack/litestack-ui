@@ -47,7 +47,7 @@
 <!--    </v-toolbar>-->
 
    <nav class="navbar">
-      <router-link to="/"><img class="navbar-logo" src="@/assets/logo-full-white.svg" alt=""></router-link>
+      <router-link class="to-main-page" to="/"><img class="navbar-logo" src="@/assets/logo-full-white.svg" alt=""></router-link>
       <div class="navbar-nav">
          <router-link class="navbar-links" v-for="link in links" :key="link" :to="link[1]">{{link[0]}}</router-link>
       </div>
@@ -107,11 +107,11 @@
           'wght' 400,
           'GRAD' 0
     }
-   .router-link-active, .router-link-exact-active{
+   .router-link-active:not(.to-main-page), .router-link-exact-active:not(.to-main-page){
       background-color: rgba(60, 60, 60);
       border-radius: 8px;
    }
-   .router-link-active:hover, .router-link-exact-active:hover{
+   .router-link-active:not(.to-main-page):hover, .router-link-exact-active:not(.to-main-page):hover{
       background-color: rgba(75, 75, 75);
       border-radius: 8px;
    }

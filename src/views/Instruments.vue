@@ -163,10 +163,37 @@ export default {
             }
         },
         async deleteTorch(id) {
+           this.loading = true;
+           try {
+              await ServerService.runCommand(id, 'delete_torch');
+           } catch (error) {
+              useAlertStore().error(error);
+           } finally {
+              this.fetchAppropriateServers();
+              this.loading = false;
+           }
         },
         async installTensorflow(id) {
+           this.loading = true;
+           try {
+              await ServerService.runCommand(id, 'install_tensorflow');
+           } catch (error) {
+              useAlertStore().error(error);
+           } finally {
+              this.fetchAppropriateServers();
+              this.loading = false;
+           }
         },
         async deleteTensorflow(id) {
+           this.loading = true;
+           try {
+              await ServerService.runCommand(id, 'delete_tensorflow');
+           } catch (error) {
+              useAlertStore().error(error);
+           } finally {
+              this.fetchAppropriateServers();
+              this.loading = false;
+           }
         },
     }
 }
