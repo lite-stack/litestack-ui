@@ -29,10 +29,10 @@
                Статус
             </th>
             <th class="text-left">
-               Torch
+               Grafana
             </th>
             <th class="text-left">
-               Tesnorflow
+               Matplotlib
             </th>
          </tr>
          </thead>
