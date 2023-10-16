@@ -2,12 +2,12 @@
    <div class="instruction-container">
       <div>
          <p>
-            Для інтеграції методів обрахунку даних <span class="font-weight-bold"> PyTorch</span> та
-            <span class="font-weight-bold"> Tensorflow</span> до створеного серверу OpenStack Вам необхідно
+            Для інтеграції баз даних <span class="font-weight-bold"> Postgres</span> та
+            <span class="font-weight-bold"> MongoDB</span> до створеного серверу OpenStack Вам необхідно
             виконати наступні дії:
          </p>
          <ul>
-            <li>Перейдіть на сторінку <span class="font-weight-bold">"Інструменти".</span></li>
+            <li>Перейдіть на сторінку <span class="font-weight-bold">"Бази даних".</span></li>
             <li>Знайдіть необхідний сервер зі списку серверів, на які можливо встановити відповідні модулі.</li>
             <li>Натисніть кнопку <span class="font-weight-bold">"Встановити"</span>
                для інсталяції необхідного модулю та почекайте приблизно 20 хвилин.</li>

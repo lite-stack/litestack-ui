@@ -2,12 +2,12 @@
    <div class="instruction-container">
       <div>
          <p>
-            Для інтеграції методів обрахунку даних <span class="font-weight-bold"> PyTorch</span> та
-            <span class="font-weight-bold"> Tensorflow</span> до створеного серверу OpenStack Вам необхідно
+            Для інтеграції методів візуалізації даних <span class="font-weight-bold"> Grafana</span> та
+            <span class="font-weight-bold"> Matplotlib</span> до створеного серверу OpenStack Вам необхідно
             виконати наступні дії:
          </p>
          <ul>
-            <li>Перейдіть на сторінку <span class="font-weight-bold">"Інструменти".</span></li>
+            <li>Перейдіть на сторінку <span class="font-weight-bold">"Графіки".</span></li>
             <li>Знайдіть необхідний сервер зі списку серверів, на які можливо встановити відповідні модулі.</li>
             <li>Натисніть кнопку <span class="font-weight-bold">"Встановити"</span>
                для інсталяції необхідного модулю та почекайте приблизно 20 хвилин.</li>
