@@ -34,6 +34,9 @@
                 <th class="text-left">
                     Tesnorflow
                 </th>
+               <th class="text-left">
+                  Test
+               </th>
             </tr>
             </thead>
             <tbody>
@@ -108,6 +111,21 @@
                         </v-btn>
                     </v-row>
                 </td>
+               <td>
+                  <v-row>
+                     <v-btn
+                         color="primary"
+                         class="mb-2"
+                         v-bind="props"
+                         variant="tonal"
+                         @click="callEcho(server.id)"
+                         :loading="loading"
+                         :disabled="server.tags.find(elem => elem === 'loading')"
+                     >
+                        echo
+                     </v-btn>
+                  </v-row>
+               </td>
             </tr>
             </tbody>
         </v-table>
@@ -195,6 +213,17 @@ export default {
               this.loading = false;
            }
         },
+       async callEcho(id) {
+          this.loading = true;
+          try {
+             await ServerService.runCommand(id, 'call_echo');
+          } catch (error) {
+             useAlertStore().error(error);
+          } finally {
+             this.fetchAppropriateServers();
+             this.loading = false;
+          }
+       },
     }
 }
 </script>
