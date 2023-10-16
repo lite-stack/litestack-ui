@@ -36,7 +36,28 @@ class ServerService {
                 serverJson['ip_v4_private'] || serverJson['ip_v6_private'],
                 serverJson['launched_at'],
                 serverJson['terminated_at'],
+                serverJson['tags'],
                 )
+            )
+        }
+
+        return servers
+    }
+
+    async getConfigurableServers() {
+        let serversJson = await ServerAPI.getConfigurableServers()
+        let servers = []
+        for (let serverJson of serversJson) {
+            servers.push(new ServerBase(
+                serverJson['id'],
+                serverJson['name'],
+                serverJson['status'],
+                serverJson['ip_v4_public'] || serverJson['ip_v6_public'],
+                serverJson['ip_v4_private'] || serverJson['ip_v6_private'],
+                serverJson['launched_at'],
+                serverJson['terminated_at'],
+                serverJson['tags'],
+            )
             )
         }
 
@@ -53,6 +74,7 @@ class ServerService {
             serverJson['ip_v4_private'] || serverJson['ip_v6_private'],
             serverJson['launched_at'],
             serverJson['terminated_at'],
+            serverJson['tags'],
             serverJson['description'],
             serverJson['flavor'],
             serverJson['image'],
@@ -93,6 +115,21 @@ class ServerService {
         await ServerAPI.actServer(id, {
             "action": action
         });
+    }
+
+    countsServersByTag(servers) {
+        let tagMap = {};
+        for (let server of servers) {
+            if(server.tags) {
+                for (let tag of server.tags) {
+                    tagMap[tag] = tagMap[tag] + 1 || 1;
+                }
+            } else {
+                tagMap['Пусті'] = tagMap['Пусті'] + 1 || 1;
+            }
+
+        }
+        return tagMap;
     }
 }
 

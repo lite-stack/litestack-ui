@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Graphs from "@/views/Graphs.vue";
 import Databases from "@/views/Databases.vue";
-import Coding from "@/views/Coding.vue";
+import Instruments from "@/views/Instruments.vue";
 
 import { useAuthStore } from '@/stores/auth.store.js';
 import {useAlertStore} from "@/stores/alert.store.js";
@@ -34,9 +34,9 @@ const routes = [
         component: Databases
     },
     {
-        path: '/coding',
-        name: 'Coding',
-        component: Coding
+        path: '/instruments',
+        name: 'Instruments',
+        component: Instruments
     },
     {
         path: '/instructions',
@@ -75,7 +75,7 @@ router.beforeEach(async (to) => {
     }
 
     if (authRequired && adminRequired && !authStore.user.is_superuser) {
-        return '/servs';
+        return '/';
     }
 });
 

@@ -18,40 +18,7 @@ import {
 } from "vuetify/labs/VDataTable";
 import 'vue-json-pretty/lib/styles.css';
 
-
-const customDarkTheme = {
-    dark: true,
-    colors: {
-        background: "#23242a",
-        // primary: colors.teal.lighten1,
-        // secondary: colors.blueGrey.lighten2,
-        // red: colors.red.lighten1,
-        // dark: colors.grey.darken4
-    },
-};
-
-const vuetify = createVuetify({
-    components: {
-        ...components,
-        VDataTable,
-        VDataTableVirtual,
-    },
-    directives,
-    styles,
-//    theme: {
-//        defaultTheme: "customDarkTheme",
-//        themes: {
-//            customDarkTheme,
-//        },
-//    },
-    icons: {
-        defaultSet: 'mdi',
-        aliases,
-        sets: {
-            mdi,
-        },
-    },
-    theme: {
+const theme = {
         themes: {
             light: {
                 dark: false,
@@ -63,9 +30,26 @@ const vuetify = createVuetify({
                 }
             },
         },
-    },
-})
+};
 
+
+const vuetify = createVuetify({
+    components: {
+        ...components,
+        VDataTable,
+        VDataTableVirtual,
+    },
+    directives,
+    styles,
+    icons: {
+        defaultSet: 'mdi',
+        aliases,
+        sets: {
+            mdi,
+        },
+    },
+    theme: theme,
+})
 
 // setup fake backend
 import { backendWrapper } from '@/helpers/backend-wrapper.js';

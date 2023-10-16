@@ -11,6 +11,10 @@ class ServerAPI {
         return await fetchWrapper.get(this.baseUrl);
     }
     
+    async getConfigurableServers() {
+        return await fetchWrapper.get(`${this.baseUrl}/instruments`);
+    }
+
     async getServer(id) {
         return await fetchWrapper.get(`${this.baseUrl}/${id}`);
     }

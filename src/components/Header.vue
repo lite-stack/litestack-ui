@@ -131,7 +131,7 @@ export default {
             ['CЕРВЕРИ', '/servs'],
             ['ГРАФІКИ', '/graphs'],
             ['БАЗИ ДАНИХ', '/databases'],
-            ['РОЗРОБКА', '/coding'],
+            ['ІНСТРУМЕНТИ', '/instruments'],
             ['ІНСТРУКЦІЇ', '/instructions'],
         ],
     }),

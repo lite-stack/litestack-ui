@@ -41,7 +41,7 @@ export const useAuthStore = defineStore({
            await this.getMe();
 
             // redirect to previous url or default to home page
-            await router.push(this.returnUrl || '/servs');
+            await router.push(this.returnUrl || '/');
         },
         async getMe() {
             const alertStore = useAlertStore();

@@ -8,6 +8,7 @@ class ServerDetailed extends ServerBase {
         private_ip,
         launched_at,
         terminated_at,
+        tags,
         description,
         flavor,
         image,
@@ -17,7 +18,7 @@ class ServerDetailed extends ServerBase {
         metadata,
         full_info,
         ) {
-        super(id, name, status, public_ip, private_ip, launched_at, terminated_at);
+        super(id, name, status, public_ip, private_ip, launched_at, terminated_at, tags);
         this.description=description;
         this.volumes=volumes;
         this.created_at=created_at;
