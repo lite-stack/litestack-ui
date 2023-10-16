@@ -6,11 +6,11 @@ class ServerAPI {
     async getServerConfigs() {
         return await fetchWrapper.get(`${this.baseUrl}/configurations`);
     }
-    
+
     async getServers() {
         return await fetchWrapper.get(this.baseUrl);
     }
-    
+
     async getConfigurableServers() {
         return await fetchWrapper.get(`${this.baseUrl}/instruments`);
     }
@@ -18,7 +18,7 @@ class ServerAPI {
     async getServer(id) {
         return await fetchWrapper.get(`${this.baseUrl}/${id}`);
     }
-    
+
     async getServerConsole(id) {
         return await fetchWrapper.get(`${this.baseUrl}/${id}/console-url`);
     }
@@ -30,17 +30,23 @@ class ServerAPI {
     async createServer(server) {
         await fetchWrapper.post(`${this.baseUrl}/from_configuration`, server);
     }
-    
+
     async updateServer(server) {
         await fetchWrapper.patch(`${this.baseUrl}/${server.id}`, server);
     }
-    
+
     async deleteServer(id) {
         await fetchWrapper.delete(`${this.baseUrl}/${id}`);
     }
 
     async actServer(id, action) {
         await fetchWrapper.patch(`${this.baseUrl}/${id}/state`, action);
+    }
+
+    async runServerCommand(id, command) {
+        await fetchWrapper.post(`${this.baseUrl}/${id}/command`, {
+            'command': command,
+        });
     }
 }
 
