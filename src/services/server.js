@@ -131,6 +131,10 @@ class ServerService {
         }
         return tagMap;
     }
+
+    async runCommand(server_id, command) {
+        await ServerAPI.runServerCommand(server_id, command);
+    }
 }
 
 export default new ServerService();
