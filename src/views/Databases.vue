@@ -47,7 +47,7 @@
                         {{ server.name }}
                     </router-link>
                     <v-tooltip
-                        v-if="server.tags.find(elem => elem === 'loading')"
+                        v-if="server.tags && server.tags.find(elem => elem === 'loading')"
                         text="На сервері встановлюється додаток. На разі, неможливо зробити дію.">
                         <template v-slot:activator="{ props }">
                             <v-icon v-bind="props" icon="mdi-information" color="primary"></v-icon>
@@ -69,7 +69,7 @@
                             variant="tonal"
                             @click="installPostgres(server.id)"
                             :loading="loading"
-                            :disabled="server.tags.find(elem => elem === 'loading')"
+                            :disabled="server.tags && server.tags.find(elem => elem === 'loading')"
                         >
                             Встановити
                         </v-btn>
@@ -81,7 +81,7 @@
                             variant="tonal"
                             @click="deletePostgres(server.id)"
                             :loading="loading"
-                            :disabled="server.tags.find(elem => elem === 'loading')"
+                            :disabled="server.tags && server.tags.find(elem => elem === 'loading')"
                         >
                             Видалити
                         </v-btn>
@@ -97,7 +97,7 @@
                             variant="tonal"
                             @click="installMongo(server.id)"
                             :loading="loading"
-                            :disabled="server.tags.find(elem => elem === 'loading')"
+                            :disabled="server.tags && server.tags.find(elem => elem === 'loading')"
                         >
                             Встановити
                         </v-btn>
@@ -109,7 +109,7 @@
                             variant="tonal"
                             @click="deleteMongo(server.id)"
                             :loading="loading"
-                            :disabled="server.tags.find(elem => elem === 'loading')"
+                            :disabled="server.tags && server.tags.find(elem => elem === 'loading')"
                         >
                             Видалити
                         </v-btn>

@@ -50,7 +50,7 @@
                         {{ server.name }}
                     </router-link>
                     <v-tooltip
-                        v-if="server.tags.find(elem => elem === 'loading')"
+                        v-if="server.tags && server.tags.find(elem => elem === 'loading')"
                         text="На сервері встановлюється додаток. На разі, неможливо зробити дію.">
                         <template v-slot:activator="{ props }">
                             <v-icon v-bind="props" icon="mdi-information" color="primary"></v-icon>
@@ -72,7 +72,7 @@
                             variant="tonal"
                             @click="installTorch(server.id)"
                             :loading="loading"
-                            :disabled="server.tags.find(elem => elem === 'loading')"
+                            :disabled="server.tags && server.tags.find(elem => elem === 'loading')"
                         >
                             Встановити
                         </v-btn>
@@ -84,7 +84,7 @@
                             variant="tonal"
                             @click="deleteTorch(server.id)"
                             :loading="loading"
-                            :disabled="server.tags.find(elem => elem === 'loading')"
+                            :disabled="server.tags && server.tags.find(elem => elem === 'loading')"
                         >
                             Видалити
                         </v-btn>
@@ -100,7 +100,7 @@
                             variant="tonal"
                             @click="installTensorflow(server.id)"
                             :loading="loading"
-                            :disabled="server.tags.find(elem => elem === 'loading')"
+                            :disabled="server.tags && server.tags.find(elem => elem === 'loading')"
                         >
                             Встановити
                         </v-btn>
@@ -112,7 +112,7 @@
                             variant="tonal"
                             @click="deleteTensorflow(server.id)"
                             :loading="loading"
-                            :disabled="server.tags.find(elem => elem === 'loading')"
+                            :disabled="server.tags && server.tags.find(elem => elem === 'loading')"
                         >
                             Видалити
                         </v-btn>
@@ -127,7 +127,7 @@
                             variant="tonal"
                             @click="callEcho(server.id)"
                             :loading="loading"
-                            :disabled="server.tags.find(elem => elem === 'loading')"
+                            :disabled="server.tags && server.tags.find(elem => elem === 'loading')"
                         >
                             echo
                         </v-btn>
@@ -223,7 +223,7 @@ export default {
         async callEcho(id) {
             this.loading = true;
             try {
-                await ServerService.runCommand(id, 'call_echo');
+                await ServerService.runCommand(id, '  echo');
             } catch (error) {
                 useAlertStore().error(error);
             } finally {
