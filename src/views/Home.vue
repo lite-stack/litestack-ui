@@ -1,8 +1,8 @@
 <template>
 
-    <v-container>
+    <v-container class="mt-10">
         <Alert/>
-        <div class="text-h4 text-center">Огляд</div>
+        <div class="text-h3 text-center">Огляд</div>
         <div v-if="!loaded"
              class="d-flex align-center justify-center"
         >
@@ -12,13 +12,11 @@
                 :size="100"
             ></v-progress-circular>
         </div>
-        <v-row class="ma-6" v-else>
-            <v-col cols=3>
-                <Pie :data="serversLimit" class="pie-chart" :options="serversLimitOptions"/>
-                <v-divider class="ma-2"></v-divider>
+        <v-row class="mt-6" v-else>
+            <v-col cols=5>
                 <Pie :data="serversLimit" class="pie-chart" :options="serversLimitOptions"/>
             </v-col>
-            <v-divider vertical class="ma-2"></v-divider>
+            <v-divider vertical class="ma-2" :thickness="5"></v-divider>
             <v-col>
                 <Bar :data="serverTags" class="bar-chart"/>
             </v-col>
@@ -60,7 +58,6 @@ export default {
     async mounted() {
         this.loaded = false
         let servers = await this.fetchServers();
-        console.log(servers)
         let serversLimit = await this.fetchServersLimit();
         this.serversLimit = {
             labels: ['Створено', 'Доступно'],
@@ -126,7 +123,7 @@ export default {
 
 <style>
 .pie-chart {
-    max-height: 300px;
+    max-height: 450px;
 }
 
 .bar-chart {

@@ -34,9 +34,9 @@
                 <th class="text-left">
                     Tesnorflow
                 </th>
-               <th class="text-left">
-                  Test
-               </th>
+                <th class="text-left">
+                    Test
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -49,6 +49,13 @@
                                  class="text-decoration-none">
                         {{ server.name }}
                     </router-link>
+                    <v-tooltip
+                        v-if="server.tags.find(elem => elem === 'loading')"
+                        text="На сервері встановлюється додаток. На разі, неможливо зробити дію.">
+                        <template v-slot:activator="{ props }">
+                            <v-icon v-bind="props" icon="mdi-information" color="primary"></v-icon>
+                        </template>
+                    </v-tooltip>
                 </td>
                 <td :class="font-weight-medium">
                     <v-chip :color="server.getStatusColor()">
@@ -111,21 +118,21 @@
                         </v-btn>
                     </v-row>
                 </td>
-               <td>
-                  <v-row>
-                     <v-btn
-                         color="primary"
-                         class="mb-2"
-                         v-bind="props"
-                         variant="tonal"
-                         @click="callEcho(server.id)"
-                         :loading="loading"
-                         :disabled="server.tags.find(elem => elem === 'loading')"
-                     >
-                        echo
-                     </v-btn>
-                  </v-row>
-               </td>
+                <td>
+                    <v-row>
+                        <v-btn
+                            color="primary"
+                            class="mb-2"
+                            v-bind="props"
+                            variant="tonal"
+                            @click="callEcho(server.id)"
+                            :loading="loading"
+                            :disabled="server.tags.find(elem => elem === 'loading')"
+                        >
+                            echo
+                        </v-btn>
+                    </v-row>
+                </td>
             </tr>
             </tbody>
         </v-table>
@@ -181,49 +188,49 @@ export default {
             }
         },
         async deleteTorch(id) {
-           this.loading = true;
-           try {
-              await ServerService.runCommand(id, 'delete_torch');
-           } catch (error) {
-              useAlertStore().error(error);
-           } finally {
-              this.fetchAppropriateServers();
-              this.loading = false;
-           }
+            this.loading = true;
+            try {
+                await ServerService.runCommand(id, 'delete_torch');
+            } catch (error) {
+                useAlertStore().error(error);
+            } finally {
+                this.fetchAppropriateServers();
+                this.loading = false;
+            }
         },
         async installTensorflow(id) {
-           this.loading = true;
-           try {
-              await ServerService.runCommand(id, 'install_tensorflow');
-           } catch (error) {
-              useAlertStore().error(error);
-           } finally {
-              this.fetchAppropriateServers();
-              this.loading = false;
-           }
+            this.loading = true;
+            try {
+                await ServerService.runCommand(id, 'install_tensorflow');
+            } catch (error) {
+                useAlertStore().error(error);
+            } finally {
+                this.fetchAppropriateServers();
+                this.loading = false;
+            }
         },
         async deleteTensorflow(id) {
-           this.loading = true;
-           try {
-              await ServerService.runCommand(id, 'delete_tensorflow');
-           } catch (error) {
-              useAlertStore().error(error);
-           } finally {
-              this.fetchAppropriateServers();
-              this.loading = false;
-           }
+            this.loading = true;
+            try {
+                await ServerService.runCommand(id, 'delete_tensorflow');
+            } catch (error) {
+                useAlertStore().error(error);
+            } finally {
+                this.fetchAppropriateServers();
+                this.loading = false;
+            }
         },
-       async callEcho(id) {
-          this.loading = true;
-          try {
-             await ServerService.runCommand(id, 'call_echo');
-          } catch (error) {
-             useAlertStore().error(error);
-          } finally {
-             this.fetchAppropriateServers();
-             this.loading = false;
-          }
-       },
+        async callEcho(id) {
+            this.loading = true;
+            try {
+                await ServerService.runCommand(id, 'call_echo');
+            } catch (error) {
+                useAlertStore().error(error);
+            } finally {
+                this.fetchAppropriateServers();
+                this.loading = false;
+            }
+        },
     }
 }
 </script>
