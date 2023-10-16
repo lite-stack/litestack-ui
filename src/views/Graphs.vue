@@ -29,10 +29,10 @@
                Статус
             </th>
             <th class="text-left">
-               Grafana
+               Torch
             </th>
             <th class="text-left">
-               Matplotlib
+               Tesnorflow
             </th>
          </tr>
          </thead>
@@ -55,13 +55,14 @@
             <td>
                <v-row>
                   <v-btn
-                      v-if="server.tags && !server.tags.find(elem => elem === 'grafana')"
+                      v-if="!server.tags || !server.tags.find(elem => elem === 'grafana')"
                       color="primary"
                       class="mb-2"
                       v-bind="props"
                       variant="tonal"
-                      @click="enableGrafana(server.id)"
+                      @click="installGrafana(server.id)"
                       :loading="loading"
+                      :disabled="server.tags.find(elem => elem === 'loading')"
                   >
                      Встановити
                   </v-btn>
@@ -71,8 +72,9 @@
                       class="mb-2"
                       v-bind="props"
                       variant="tonal"
-                      @click="disableGrafana(server.id)"
+                      @click="deleteGrafana(server.id)"
                       :loading="loading"
+                      :disabled="server.tags.find(elem => elem === 'loading')"
                   >
                      Видалити
                   </v-btn>
@@ -81,13 +83,14 @@
             <td>
                <v-row>
                   <v-btn
-                      v-if="server.tags && !server.tags.find(elem => elem === 'matplotlib')"
+                      v-if="!server.tags || !server.tags.find(elem => elem === 'matplotlib')"
                       color="primary"
                       class="mb-2"
                       v-bind="props"
                       variant="tonal"
-                      @click="enableMatplotlib(server.id)"
+                      @click="installMatplotlib(server.id)"
                       :loading="loading"
+                      :disabled="server.tags.find(elem => elem === 'loading')"
                   >
                      Встановити
                   </v-btn>
@@ -97,8 +100,9 @@
                       class="mb-2"
                       v-bind="props"
                       variant="tonal"
-                      @click="disableMatplotlib(server.id)"
+                      @click="deleteMatplotlib(server.id)"
                       :loading="loading"
+                      :disabled="server.tags.find(elem => elem === 'loading')"
                   >
                      Видалити
                   </v-btn>
@@ -121,7 +125,6 @@ export default {
    name: 'Instruments',
    components: {ServerDeleteDialog, ServerUpdateDialog},
    async created() {
-      await this.fetchServerConfigs()
       await this.fetchServersLimit()
       await this.fetchAppropriateServers()
    },
@@ -133,13 +136,6 @@ export default {
       }
    },
    methods: {
-      async fetchServerConfigs() {
-         try {
-            this.configs = await ServerService.getConfigs()
-         } catch (error) {
-            useAlertStore().error(error);
-         }
-      },
       async fetchAppropriateServers() {
          try {
             this.servers = await ServerService.getConfigurableServers()
@@ -154,45 +150,51 @@ export default {
             useAlertStore().error(error);
          }
       },
-      async enableGrafana(id) {
+
+      async installGrafana(id) {
+         this.loading = true;
          try {
-            await ServerService.enableGrafana(id);
+            await ServerService.runCommand(id, 'install_grafana');
          } catch (error) {
             useAlertStore().error(error);
          } finally {
-            this.close();
-            this.loading = false
+            this.fetchAppropriateServers();
+            this.loading = false;
          }
-         await this.fetchServerConfigs()
       },
-      async enableMatplotlib(id) {
+      async deleteGrafana(id) {
+         this.loading = true;
          try {
-            await ServerService.enableMatplotlib(id);
+            await ServerService.runCommand(id, 'delete_grafana');
          } catch (error) {
             useAlertStore().error(error);
          } finally {
-            this.close();
-            this.loading = false
+            this.fetchAppropriateServers();
+            this.loading = false;
          }
-         await this.fetchServerConfigs()
       },
-      async disableGrafana(id) {
-
-         await this.fetchServerConfigs()
-      },
-      async disableMatplotlib(id) {
-
-         await this.fetchServerConfigs()
-      },
-      get_config_name() {
-         let configNames = []
-
-         for (let config of this.configs) {
-            configNames.push(config.name)
+      async installMatplotlib(id) {
+         this.loading = true;
+         try {
+            await ServerService.runCommand(id, 'install_matplotlib');
+         } catch (error) {
+            useAlertStore().error(error);
+         } finally {
+            this.fetchAppropriateServers();
+            this.loading = false;
          }
-
-         return configNames
-      }
+      },
+      async deleteMatplotlib(id) {
+         this.loading = true;
+         try {
+            await ServerService.runCommand(id, 'delete_matplotlib');
+         } catch (error) {
+            useAlertStore().error(error);
+         } finally {
+            this.fetchAppropriateServers();
+            this.loading = false;
+         }
+      },
    }
 }
 </script>
