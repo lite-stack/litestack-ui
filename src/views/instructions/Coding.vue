@@ -1,5 +1,35 @@
 <template>
-<v-container>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Augue lacus viverra vitae congue. Vel pharetra vel turpis nunc eget lorem dolor sed. In aliquam sem fringilla ut. At volutpat diam ut venenatis tellus in. Viverra adipiscing at in tellus integer. In massa tempor nec feugiat. Sapien pellentesque habitant morbi tristique senectus et netus et. Ornare aenean euismod elementum nisi quis eleifend quam adipiscing vitae. Sed euismod nisi porta lorem mollis. Aliquam sem et tortor consequat id porta nibh.
-</v-container>
+   <div class="instruction-container">
+      <div>
+         <p>
+            Для інтеграції методів обрахунку даних <span class="font-weight-bold"> PyTorch</span> та
+            <span class="font-weight-bold"> Tensorflow</span> до створеного серверу OpenStack Вам необхідно
+            виконати наступні дії:
+         </p>
+         <ul>
+            <li>Перейдіть на сторінку <span class="font-weight-bold">"Інструменти".</span></li>
+            <li>Знайдіть необхідний сервер зі списку серверів, на які можливо встановити відповідні модулі.</li>
+            <li>Натисніть кнопку <span class="font-weight-bold">"Встановити"</span>
+               для інсталяції необхідного модулю та почекайте приблизно 20 хвилин.</li>
+         </ul>
+         <p>
+            Після успішного встановлення модулю текст на кнопці зміниться на
+            <span class="font-weight-bold">"Видалити"</span>. Для деінсталяції модулю натисніть на відповідну кнопку.
+         </p>
+      </div>
+   </div>
 </template>
+
+<style scoped>
+ul li{
+   line-height: 160%; /*or whatever height you like*/
+   list-style: circle;
+}
+
+ul{
+   margin: 0;
+   padding: 0 0 0 2em;
+}
+</style>
+<script setup>
+</script>

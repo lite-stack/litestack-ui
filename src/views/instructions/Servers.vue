@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+   <div class="instruction-container">
         <div>
             <span class="text-h5">Сторінка конфігурації сервера OpenStack</span>
             <div>На цій сторінці можна побачити загальну інформацію щодо конфігурацій серверів та створених серверів.
@@ -109,16 +109,19 @@
                 </li>
             </ol>
         </div>
-    </v-container>
+   </div>
 </template>
 
-<style>
+<style scoped>
+
 ul li, ol li {
-    line-height: 160%; /*or whatever height you like*/
+   line-height: 160%; /*or whatever height you like*/
 }
 
 ul, ol {
-    margin: 0;
-    padding: 0 0 0 2em;
+   margin: 0;
+   padding: 0 0 0 2em;
 }
 </style>
+<script setup>
+</script>

@@ -18,6 +18,9 @@
 .container {
     margin: 50px 250px;
 }
+.instruction-container{
+   padding: 15px 15px;
+}
 
 .info-container {
     display: flex;
